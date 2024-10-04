@@ -55,7 +55,7 @@ foreach ($ps1File in $ps1Files)
 }
 
 # Write to log.
-Write-CustomLog -Category 'Module' -Message ("Script path is '{0}'" -f $scriptPath) -Level Verbose;
+Write-CustomLog -Message ("Script path is '{0}'" -f $scriptPath) -Level Verbose;
 
 # Get all the functions in the public section.
 $publicFunctions = $publicPs1Files.Basename;
@@ -63,11 +63,8 @@ $publicFunctions = $publicPs1Files.Basename;
 # Set script variable.
 $Script:scriptPath = $scriptPath;
 
-# Check if required modules are installed.
-$installedModules = Get-M365Module -Modules $Script:Modules | Where-Object { $false -eq $_.Valid };
-
 # Write to log.
-Write-CustomLog -Category 'Module' -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
+Write-CustomLog -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
 
 # Export functions.
 Export-ModuleMember -Function $publicFunctions;
