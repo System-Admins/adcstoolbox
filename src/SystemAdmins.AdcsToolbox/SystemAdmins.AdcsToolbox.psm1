@@ -38,6 +38,13 @@ $ps1Files += ($publicPs1Files).FullName;
 # Loop through each PowerShell file.
 foreach ($ps1File in $ps1Files)
 {
+    # If line is empty.
+    if ([string]::IsNullOrEmpty($ps1File))
+    {
+        # Skip to next line.
+        continue;
+    }
+
     # Try to dot source the file.
     try
     {
@@ -50,7 +57,7 @@ foreach ($ps1File in $ps1Files)
     catch
     {
         # Throw execption.
-        Write-Error -Message ("Something went wrong while importing the PowerShell file '{0}', the execption is:`r`n" -f $ps1File, $_);
+        throw ("Something went wrong while importing the PowerShell file '{0}', the execption is:`r`n" -f $ps1File, $_);
     }
 }
 
@@ -63,8 +70,34 @@ $publicFunctions = $publicPs1Files.Basename;
 # Set script variable.
 $Script:scriptPath = $scriptPath;
 
+# Get the operating system.
+$operatingSystemType = Get-OperatingSystemType;
+
+# If the operating system is not Windows.
+if ($operatingSystemType -ne 'Windows')
+{
+    # Throw execption.
+    #throw ("The operating system is '{0}', aborting" -f $operatingSystemType);
+
+    # Exit script.
+    #exit 1;
+}
+
+# Test if the current user is a local administrator.
+#$isLocalAdmin = Test-LocalAdmin;
+
+# If the current user is not a local administrator.
+if ($false -eq $isLocalAdmin)
+{
+    # Throw execption.
+    #throw ("The current user is not a local administrator, aborting");
+
+    # Exit script.
+    #exit 1;
+}
+
 # Write to log.
 Write-CustomLog -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
 
 # Export functions.
-Export-ModuleMember -Function $publicFunctions;
+#Export-ModuleMember -Function $publicFunctions;
