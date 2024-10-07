@@ -71,20 +71,33 @@ $publicFunctions = $publicPs1Files.Basename;
 $Script:scriptPath = $scriptPath;
 
 # Get the operating system.
-$operatingSystemType = Get-OperatingSystemType;
+$operatingSystem = Get-OperatingSystem;
 
 # If the operating system is not Windows.
-if ($operatingSystemType -ne 'Windows')
+if ($operatingSystem -ne 'Windows')
 {
     # Throw execption.
-    #throw ("The operating system is '{0}', aborting" -f $operatingSystemType);
+    #throw ("The operating system is '{0}', aborting" -f $operatingSystem);
+
+    # Exit script.
+    #exit 1;
+}
+
+# Get the Windows edition.
+$windowsEdition = Get-WindowsEdition;
+
+# If the Windows edition is not Windows Server.
+if ($windowsEdition.Edition -notlike '*Windows Server*')
+{
+    # Throw execption.
+    #throw ("Not running Windows Server, the host is running '{0}', aborting" -f $windowsEdition.Edition);
 
     # Exit script.
     #exit 1;
 }
 
 # Test if the current user is a local administrator.
-#$isLocalAdmin = Test-LocalAdmin;
+$isLocalAdmin = Test-LocalAdmin;
 
 # If the current user is not a local administrator.
 if ($false -eq $isLocalAdmin)

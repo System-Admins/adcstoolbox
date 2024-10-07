@@ -1,4 +1,4 @@
-function Get-OperatingSystemType
+function Get-OperatingSystem
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Get-OperatingSystemType
     .DESCRIPTION
         Return either Windows, macOS, Linux, FreeBSD or Unknown.
     .EXAMPLE
-        Get-OperatingSystemType;
+        Get-OperatingSystem;
     #>
     [cmdletbinding()]
     [OutputType([string])]
