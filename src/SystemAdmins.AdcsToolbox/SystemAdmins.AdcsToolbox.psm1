@@ -70,44 +70,8 @@ $publicFunctions = $publicPs1Files.Basename;
 # Set script variable.
 $Script:scriptPath = $scriptPath;
 
-# Get the operating system.
-$operatingSystem = Get-OperatingSystem;
-
-# If the operating system is not Windows.
-if ($operatingSystem -ne 'Windows')
-{
-    # Throw execption.
-    #throw ("The operating system is '{0}', aborting" -f $operatingSystem);
-
-    # Exit script.
-    #exit 1;
-}
-
-# Get the Windows edition.
-$windowsEdition = Get-WindowsEdition;
-
-# If the Windows edition is not Windows Server.
-if ($windowsEdition.Edition -notlike '*Windows Server*')
-{
-    # Throw execption.
-    #throw ("Not running Windows Server, the host is running '{0}', aborting" -f $windowsEdition.Edition);
-
-    # Exit script.
-    #exit 1;
-}
-
-# Test if the current user is a local administrator.
-$isLocalAdmin = Test-LocalAdmin;
-
-# If the current user is not a local administrator.
-if ($false -eq $isLocalAdmin)
-{
-    # Throw execption.
-    #throw ("The current user is not a local administrator, aborting");
-
-    # Exit script.
-    #exit 1;
-}
+# Test if the module prerequisites are fulfilled.
+$null = Test-ModulePrerequisite;
 
 # Write to log.
 Write-CustomLog -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
