@@ -24,10 +24,10 @@ function Get-CertSvcDatabasePath
 
         # Object to store paths.
         [pscustomobject]$paths = [pscustomobject]@{
-            Data = $null;
-            Log = $null;
+            Data   = $null;
+            Log    = $null;
             System = $null;
-            Temp = $null;
+            Temp   = $null;
         };
     }
     PROCESS
@@ -48,7 +48,7 @@ function Get-CertSvcDatabasePath
     {
         # Write to log.
         Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database paths' -Type 'End';
-        
+
         # Return paths.
         return $paths;
     }
