@@ -71,7 +71,7 @@ $publicFunctions = $publicPs1Files.Basename;
 $Script:scriptPath = $scriptPath;
 
 # Test if the module prerequisites are fulfilled.
-#$null = Test-ModulePrerequisite;
+$null = Test-ModulePrerequisite;
 
 # Write to log.
 Write-CustomLog -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
