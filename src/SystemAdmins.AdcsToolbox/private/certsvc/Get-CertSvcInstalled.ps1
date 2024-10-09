@@ -17,7 +17,7 @@ function Test-CertSvcInstalled
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if CertSvc is installed' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if CertSvc is installed' -Type 'Begin';
 
         # Boolean to return.
         [bool]$isInstalled = $false;
@@ -46,7 +46,7 @@ function Test-CertSvcInstalled
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if CertSvc is installed' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if CertSvc is installed' -Type 'End';
 
         # Return boolean.
         return $isInstalled;

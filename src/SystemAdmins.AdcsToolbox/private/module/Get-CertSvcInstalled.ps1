@@ -17,7 +17,7 @@ function Get-ModuleDependency
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if required modules are installed' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if required modules are installed' -Type 'Begin';
 
         # Modules to check.
         $modules = @(
@@ -50,7 +50,7 @@ function Get-ModuleDependency
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if required modules are installed' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if required modules are installed' -Type 'End';
 
         # Return boolean.
         return $isValid;

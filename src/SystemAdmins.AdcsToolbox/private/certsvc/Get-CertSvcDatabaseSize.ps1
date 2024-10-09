@@ -17,7 +17,7 @@ function Get-CertSvcDatabaseSize
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database size' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database size' -Type 'Begin';
 
         # Object to store sizes.
         [pscustomobject]$sizes = [pscustomobject]@{
@@ -47,7 +47,7 @@ function Get-CertSvcDatabaseSize
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database size' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database size' -Type 'End';
 
         # Return sizes.
         return $sizes;

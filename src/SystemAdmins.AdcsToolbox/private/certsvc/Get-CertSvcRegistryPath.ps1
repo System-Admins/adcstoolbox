@@ -17,7 +17,7 @@ function Get-CertSvcRegistryPath
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc registry paths' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc registry paths' -Type 'Begin';
 
         # Configuration registry path.
         [string]$configurationRegistryPath = 'HKLM:\SYSTEM\CurrentControlSet\Services\CertSvc\Configuration';
@@ -69,8 +69,8 @@ function Get-CertSvcRegistryPath
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc registry paths' -Type 'End';
-        
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc registry paths' -Type 'End';
+
         # Return paths.
         return $paths;
     }

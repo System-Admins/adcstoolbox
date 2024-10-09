@@ -1,4 +1,4 @@
-function Test-EseUtilty
+function Test-EsentUtl
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Test-EseUtilty
     .DESCRIPTION
         Return true of false
     .EXAMPLE
-        Test-EseUtilty;
+        Test-EsentUtl;
     #>
     [cmdletbinding()]
     [OutputType([bool])]
@@ -17,7 +17,7 @@ function Test-EseUtilty
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'Begin';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\esentutl.exe';
@@ -46,7 +46,7 @@ function Test-EseUtilty
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'End';
 
         # Return boolean.
         return $isAvailable;

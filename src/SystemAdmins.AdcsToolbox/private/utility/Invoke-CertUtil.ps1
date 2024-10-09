@@ -7,6 +7,8 @@ function Invoke-CertUtil
         Return output from the certificate utility.
     .EXAMPLE
         Invoke-CertUtil;
+    .EXAMPLE
+        Invoke-CertUtil -Arguments '-pulse';
     #>
     [cmdletbinding()]
     [OutputType([bool])]
@@ -21,7 +23,7 @@ function Invoke-CertUtil
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'Begin';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\certutil.exe';
@@ -71,18 +73,8 @@ function Invoke-CertUtil
             # If exit code is not 0 (success).
             if ($process.ExitCode -eq 0)
             {
-                # If arguments is set.
-                if (!([string]::IsNullOrEmpty($Arguments)))
-                {
-                    # Write to log.
-                    Write-CustomLog -Message ("Succesfully executed certutil.exe with arguments '{0}'" -f $Arguments) -Level Verbose;
-                }
-                # Else no arguments.
-                else
-                {
-                    # Write to log.
-                    Write-CustomLog -Message 'Succesfully executed certutil.exe without arguments' -Level Verbose;
-                }
+                # Write to log.
+                Write-CustomLog -Message ('Succesfully executed certutil.exe') -Level Verbose;
 
                 # Get output.
                 $result = $process.StandardOutput.ReadToEnd();
@@ -110,13 +102,13 @@ function Invoke-CertUtil
         catch
         {
             # Throw execption.
-            throw ('Something went wrong while executing certutil.exe. {1}' -f $Arguments, $_);
+            throw ('Something went wrong while executing certutil.exe. {0}' -f $_);
         }
     }
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'End';
 
         # Return result.
         return $result;

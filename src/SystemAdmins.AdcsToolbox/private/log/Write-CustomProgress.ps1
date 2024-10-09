@@ -12,7 +12,7 @@ function Write-CustomProgress
     .PARAMETER Type
         Start or end.
     .EXAMPLE
-        $progress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate' -Type 'Start';
+        $progress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate' -Type 'Begin';
         Write-CustomProgress -Id $progress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate' -Type 'End';
 
     #>
@@ -30,15 +30,15 @@ function Write-CustomProgress
         [ValidateNotNullOrEmpty()]
         [string]$CurrentOperation,
 
-        # Start or end.
+        # Begin or end.
         [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [ValidateSet('Start', 'End')]
+        [ValidateSet('Begin', 'End')]
         [string]$Type,
 
         # Id of the progress.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateRange(0, [int]::MaxValue)]
-        [int]$Id = (Get-Random -Minimum 0 -Maximum ([int]::MaxValue))
+        [int]$ProgressId = (Get-Random -Minimum 0 -Maximum ([int]::MaxValue))
     )
 
     BEGIN
@@ -47,31 +47,31 @@ function Write-CustomProgress
     PROCESS
     {
         # If type is "Start".
-        if ($Type -eq 'Start')
+        if ($Type -eq 'Begin')
         {
             # Write to log.
-            Write-CustomLog -Message ("Starting processing '{0}' with ID '{1}'" -f $Activity, $Id) -Level Verbose;
+            Write-CustomLog -Message ("Begin processing '{0}' with ID '{1}'" -f $Activity, $ProgressId) -Level Verbose;
 
             # Write progress.
-            Write-Progress -Id $Id -Activity $Activity -CurrentOperation $CurrentOperation;
+            Write-Progress -Id $ProgressId -Activity $Activity -CurrentOperation $CurrentOperation;
         }
         # Else if type is "End".
         else
         {
             # Write progress.
-            Write-Progress -Id $Id -Activity $Activity -CurrentOperation $CurrentOperation -Completed;
+            Write-Progress -Id $ProgressId -Activity $Activity -CurrentOperation $CurrentOperation -Completed;
 
             # Write to log.
-            Write-CustomLog -Message ("Ending process '{0}' with ID '{1}'" -f $Activity, $Id) -Level Verbose;
+            Write-CustomLog -Message ("Ending process '{0}' with ID '{1}'" -f $Activity, $ProgressId) -Level Verbose;
         }
     }
     END
     {
-        # If type is "Start".
-        if ($Type -eq 'Start')
+        # If type is "Begin".
+        if ($Type -eq 'Begin')
         {
             # Return id.
-            return $Id;
+            return $ProgressId;
         }
     }
 }

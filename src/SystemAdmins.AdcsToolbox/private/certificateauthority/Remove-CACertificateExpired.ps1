@@ -26,7 +26,7 @@ function Remove-CACertificateExpired
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'Begin';
 
         # Arguments to be used with CertUtil.exe.
         [string]$certUtilArguments = '';
@@ -91,7 +91,7 @@ function Remove-CACertificateExpired
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'End';
 
         # Return the expired certificates.
         return $expiredCertificates;

@@ -17,7 +17,7 @@ function Get-OperatingSystem
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system type' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system type' -Type 'Begin';
 
         # Operating system type.
         [string]$operatingSystemType = $null;
@@ -56,7 +56,7 @@ function Get-OperatingSystem
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system type' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system type' -Type 'End';
 
         # Return operating system.
         return $operatingSystemType;

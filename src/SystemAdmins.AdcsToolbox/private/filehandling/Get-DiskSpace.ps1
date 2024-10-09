@@ -17,7 +17,7 @@ function Get-DiskSpace
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get disk size' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get disk size' -Type 'Begin';
 
         # Get disk info.
         $disks = Get-WmiObject -Class Win32_LogicalDisk;
@@ -46,7 +46,7 @@ function Get-DiskSpace
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get disk size' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get disk size' -Type 'End';
 
         # Return result.
         return $result;

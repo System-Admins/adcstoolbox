@@ -29,7 +29,7 @@ function Backup-CADatabase
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Backup ADCS database' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Backup ADCS database' -Type 'Begin';
 
         # Get disk space.
         $disksSpace = Get-DiskSpace;
@@ -138,7 +138,7 @@ function Backup-CADatabase
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Backup ADCS database' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Backup ADCS database' -Type 'End';
 
         # Return result.
         return $result;

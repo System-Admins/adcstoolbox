@@ -17,7 +17,7 @@ function Stop-CertSvcService
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Stopping CertSvc service' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Stopping CertSvc service' -Type 'Begin';
 
         # Service name.
         [string]$serviceName = 'CertSvc';
@@ -66,6 +66,6 @@ function Stop-CertSvcService
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Stopping CertSvc service' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Stopping CertSvc service' -Type 'End';
     }
 }

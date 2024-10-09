@@ -17,7 +17,7 @@ function Test-ModulePrerequisite
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'Begin';
     }
     PROCESS
     {
@@ -74,7 +74,7 @@ function Test-ModulePrerequisite
         }
 
         # Test if the Extensible Storage Engine utility is available.
-        $isEseUtiltyAvailable = Test-EseUtilty;
+        $isEseUtiltyAvailable = Test-EsentUtl;
 
         # If the Extensible Storage Engine utility is not available.
         if ($false -eq $isEseUtiltyAvailable)
@@ -115,6 +115,6 @@ function Test-ModulePrerequisite
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'End';
     }
 }

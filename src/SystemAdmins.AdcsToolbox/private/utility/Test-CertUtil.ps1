@@ -17,7 +17,7 @@ function Test-CertUtil
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if certutil.exe is available' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if certutil.exe is available' -Type 'Begin';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\certutil.exe';
@@ -46,7 +46,7 @@ function Test-CertUtil
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if certutil.exe is available' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if certutil.exe is available' -Type 'End';
 
         # Return boolean.
         return $isAvailable;

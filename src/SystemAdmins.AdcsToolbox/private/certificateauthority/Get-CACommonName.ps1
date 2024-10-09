@@ -17,7 +17,7 @@ function Get-CACommonName
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificate authority common name' -Type 'Start';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificate authority common name' -Type 'Begin';
 
         # Get the registry path.
         [pscustomobject]$registryPath = Get-CertSvcRegistryPath;
@@ -33,7 +33,7 @@ function Get-CACommonName
     END
     {
         # Write to log.
-        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificate authority common name' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificate authority common name' -Type 'End';
 
         # Return common name.
         return $commonName;
