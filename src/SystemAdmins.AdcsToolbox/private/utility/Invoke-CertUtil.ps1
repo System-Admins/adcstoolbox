@@ -31,16 +31,6 @@ function Invoke-CertUtil
     }
     PROCESS
     {
-        # Test if the utility exists.
-        $certUtilAvailable = Test-CertUtil;
-
-        # If the utility does not exist.
-        if ($false -eq $certUtilAvailable)
-        {
-            # Throw execption.
-            throw ('The certificate utility (certutil.exe) is not available, aborting');
-        }
-
         # Create process object.
         $processStartInfo = New-Object System.Diagnostics.ProcessStartInfo;
         $processStartInfo.FileName = $utilityPath;
