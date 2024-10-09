@@ -33,7 +33,7 @@ function Invoke-CADatabaseDefragmentation
         $commonName = Get-CACommonName;
 
         # Get the database path.
-        $databasePath = Get-CertSvcDatabasePath;
+        $databasePath = Get-CADatabasePath;
 
         # Construct the path to the database.
         $databaseFilePath = ('{0}\{1}.edb' -f $databasePath.Data, $commonName);

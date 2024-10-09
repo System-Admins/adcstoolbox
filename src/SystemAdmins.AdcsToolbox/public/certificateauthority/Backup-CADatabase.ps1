@@ -35,7 +35,7 @@ function Backup-CADatabase
         $disksSpace = Get-DiskSpace;
 
         # Get database size.
-        $databaseSize = Get-CertSvcDatabaseSize;
+        $databaseSize = Get-CADatabaseSize;
 
         # Get drive letter.
         $driveLetter = $Path.Substring(0, 2);

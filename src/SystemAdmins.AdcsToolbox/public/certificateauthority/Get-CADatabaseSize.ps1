@@ -1,4 +1,4 @@
-function Get-CertSvcDatabaseSize
+function Get-CADatabaseSize
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Get-CertSvcDatabaseSize
     .DESCRIPTION
         Return object sizes.
     .EXAMPLE
-        Get-CertSvcDatabaseSize;
+        Get-CADatabaseSize;
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]
@@ -28,7 +28,7 @@ function Get-CertSvcDatabaseSize
         };
 
         # Get the database paths.
-        [pscustomobject]$paths = Get-CertSvcDatabasePath;
+        [pscustomobject]$paths = Get-CADatabasePath;
     }
     PROCESS
     {

@@ -1,4 +1,4 @@
-function Get-CertSvcDatabasePath
+function Get-CADatabasePath
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Get-CertSvcDatabasePath
     .DESCRIPTION
         Return object with paths.
     .EXAMPLE
-        Get-CertSvcDatabasePath;
+        Get-CADatabasePath;
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]
