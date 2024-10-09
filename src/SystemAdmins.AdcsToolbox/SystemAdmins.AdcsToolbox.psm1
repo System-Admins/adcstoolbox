@@ -73,8 +73,12 @@ $Script:scriptPath = $scriptPath;
 # Test if the module prerequisites are fulfilled.
 $null = Test-ModulePrerequisite;
 
-# Write to log.
-Write-CustomLog -Message ("Exporting the functions '{0}'" -f ($publicFunctions -join ',')) -Level Verbose;
+# Foreach function in the public functions.
+foreach ($exportFunction in $publicFunctions)
+{
+    # Write to log.
+    Write-CustomLog -Message ("Exporting the function '{0}'" -f $exportFunction) -Level Verbose;
+}
 
 # Export functions.
-#Export-ModuleMember -Function $publicFunctions;
+Export-ModuleMember -Function $publicFunctions;
