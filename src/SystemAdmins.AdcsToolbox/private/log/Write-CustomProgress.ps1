@@ -50,7 +50,7 @@ function Write-CustomProgress
         if ($Type -eq 'Start')
         {
             # Write to log.
-            Write-CustomLog -Message ("Starting processing '{0}'" -f $Activity) -Level Verbose;
+            Write-CustomLog -Message ("Starting processing '{0}' with ID '{1}'" -f $Activity, $Id) -Level Verbose;
 
             # Write progress.
             Write-Progress -Id $Id -Activity $Activity -CurrentOperation $CurrentOperation;
@@ -62,7 +62,7 @@ function Write-CustomProgress
             Write-Progress -Id $Id -Activity $Activity -CurrentOperation $CurrentOperation -Completed;
 
             # Write to log.
-            Write-CustomLog -Message ("Ending process '{0}'" -f $Activity) -Level Verbose;
+            Write-CustomLog -Message ("Ending process '{0}' with ID '{1}'" -f $Activity, $Id) -Level Verbose;
         }
     }
     END

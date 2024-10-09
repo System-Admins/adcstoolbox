@@ -31,7 +31,7 @@ function Get-CertSvcService
             [System.ServiceProcess.ServiceController]$service = Get-Service -Name $serviceName -ErrorAction Stop;
 
             # Write to log.
-            Write-CustomLog -Message ("Service is '{0}'" -f $service.Status);
+            Write-CustomLog -Message ("Service is '{0}'" -f $service.Status) -Verbose;
         }
         # Something went wrong.
         catch
