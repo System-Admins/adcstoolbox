@@ -98,6 +98,19 @@ function Test-ModulePrerequisite
             # Exit script.
             exit 1;
         }
+
+        # Test if the required modules are installed.
+        $isModuleDependency = Get-ModuleDependency;
+
+        # If the required modules are not installed.
+        if ($false -eq $isModuleDependency)
+        {
+            # Throw execption.
+            throw ('The required PowerShell modules are not installed, aborting');
+
+            # Exit script.
+            exit 1;
+        }
     }
     END
     {

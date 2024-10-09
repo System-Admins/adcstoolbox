@@ -61,10 +61,10 @@ function Start-CertSvcService
         {
             throw ("Something went wrong while starting the service '{0}'. {1}" -f $serviceName, $_.Exception.Message);
         }
-        END
-        {
-            # Write to log.
-            Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Starting CertSvc service' -Type 'End';
-        }
+    }
+    END
+    {
+        # Write to log.
+        Write-CustomProgress -Id $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Starting CertSvc service' -Type 'End';
     }
 }
