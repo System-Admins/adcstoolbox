@@ -2,7 +2,7 @@ function Get-ModuleDependency
 {
     <#
     .SYNOPSIS
-        Test if required modules is installed.
+        Test and import if required modules is installed.
     .DESCRIPTION
         Return true or false.
     .EXAMPLE
@@ -44,6 +44,15 @@ function Get-ModuleDependency
 
                 # Set boolean to false.
                 $isValid = $false;
+            }
+            # Else module is available.
+            else
+            {
+                # Write to log.
+                Write-CustomLog -Message ("Module '{0}' is available" -f $module);
+
+                # Import module.
+                Import-Module -Name $module -ListAvailable;
             }
         }
     }

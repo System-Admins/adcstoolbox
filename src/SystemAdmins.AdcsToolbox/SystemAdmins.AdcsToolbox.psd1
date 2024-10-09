@@ -6,7 +6,7 @@
     ModuleVersion        = '1.0.0';
 
     # Supported PSEditions
-    CompatiblePSEditions = @('Core'); # Should be Desktop
+    CompatiblePSEditions = @('Desktop');
 
     # ID used to uniquely identify this module
     GUID                 = 'a3276fb6-6a90-4b4d-b534-734718e38d73';
@@ -24,7 +24,7 @@
     Description          = 'Module for AD CS tasks such as maintenance etc.';
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion = '7.4.5'; # Should be 5.1
+    PowerShellVersion = '5.1';
 
     # Name of the PowerShell host required by this module
     # PowerShellHostName = '';

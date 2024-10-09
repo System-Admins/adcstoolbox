@@ -21,14 +21,11 @@ function Test-LocalAdmin
 
         # Boolean to check if the user is a local admin.
         [bool]$isLocalAdmin = $false;
-
-        # Get the current user.
-        [Security.Principal.WindowsIdentity]$currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent();
     }
     PROCESS
     {
         # Is running as administrator.
-        if (($currentIdentity).IsInRole([Security.Principal.WindowsBuiltInRole]'Administrator'))
+        if (([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] 'Administrator'))
         {
             # Write to log.
             Write-CustomLog -Message ('The current user is a local administrator') -Level Verbose;
