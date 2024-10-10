@@ -40,7 +40,7 @@ function Get-ModuleDependency
             if ($null -eq $moduleInstalled)
             {
                 # Write to log.
-                Write-CustomLog -Message ("Module '{0}' is not available" -f $module);
+                Write-CustomLog -Message ("Module '{0}' is not available" -f $module) -Level Verbose;
 
                 # Set boolean to false.
                 $isValid = $false;
@@ -49,10 +49,10 @@ function Get-ModuleDependency
             else
             {
                 # Write to log.
-                Write-CustomLog -Message ("Module '{0}' is available" -f $module);
+                Write-CustomLog -Message ("Module '{0}' is available" -f $module) -Level Verbose;
 
                 # Import module.
-                Import-Module -Name $module -ListAvailable;
+                Import-Module -Name $module;
             }
         }
     }

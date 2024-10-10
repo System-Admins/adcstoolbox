@@ -7,6 +7,8 @@ function Get-CACertificateExpired
         Return array list of expired certificates.
     .EXAMPLE
         Get-CACertificateExpired;
+    .EXAMPLE
+        Get-CACertificateExpired -ExpireDate (Get-Date).AddDays(-30);
     #>
     [cmdletbinding()]
     [OutputType([string])]
@@ -32,7 +34,7 @@ function Get-CACertificateExpired
     PROCESS
     {
         # If date is set.
-        if ($null -ne $ExpireDate)
+        if ($PSBoundParameters.ContainsKey('ExpireDate'))
         {
             # Contruct the arguments.
             $certUtilArguments = ('-view -restrict "Certificate Expiration Date < {0}" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode" csv' -f $ExpireDate.ToString("dd'/'MM'/'yyyy"));
@@ -69,6 +71,12 @@ function Get-CACertificateExpired
 
             # Convert row from CSV to object.
             $csvData = $row | ConvertFrom-Csv -Header 'RequestId', 'RequesterName', 'CommonName', 'CertificateTemplate', 'ExpirationDate', 'CertificateHash', 'StatusCode' -Delimiter ',';
+
+            # Convert the expiration date to datetime.
+            [datetime]$expirationDate = [datetime]$csvData.ExpirationDate;
+
+            # Set the revocation date.
+            $csvData.ExpirationDate = $expirationDate;
 
             # Add the data to the object array.
             $null = $expiredCertificates.Add($csvData);

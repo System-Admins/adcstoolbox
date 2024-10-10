@@ -1,10 +1,10 @@
-function Remove-CACertificateExpired
+function Remove-CACertificateRevoked
 {
     <#
     .SYNOPSIS
-        Remove expired certificates.
+        Remove revoked certificates.
     .DESCRIPTION
-        This will remove expired ADCS certificates that are expired up to a certain date.
+        This will remove revoked ADCS certificates that are expired up to a certain date.
     .EXAMPLE
         Remove-CACertificateExpired;
     #>
@@ -15,7 +15,7 @@ function Remove-CACertificateExpired
         # Date to remove expired certificates up-to. Default is today.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateScript({ $_ -le (Get-Date) })]
-        [DateTime]$ExpireDate = (Get-Date),
+        [DateTime]$RevokedDate = (Get-Date),
 
         # Limit the number of certificates to remove.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -26,22 +26,22 @@ function Remove-CACertificateExpired
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'Begin';
+        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing revoked certificates from CA' -Type 'Begin';
 
         # Arguments to be used with CertUtil.exe.
         [string]$certUtilArguments = '';
 
         # If date is set.
-        if ($PSBoundParameters.ContainsKey('ExpireDate'))
+        if ($PSBoundParameters.ContainsKey('RevokedDate'))
         {
-            # Get expired certificates.
-            $expiredCertificates = Get-CACertificateExpired -ExpireDate $ExpireDate;
+            # Get revoked certificates.
+            $revokedCertificates = Get-CACertificateRevoked -RevokedDate $RevokedDate;
         }
         # Else use default.
         else
         {
-            # Get expired certificates.
-            $expiredCertificates = Get-CACertificateExpired;
+            # Get revoked certificates.
+            $revokedCertificates = Get-CACertificateRevoked;
         }
 
         # Array list for removed certificates.
@@ -49,8 +49,8 @@ function Remove-CACertificateExpired
     }
     PROCESS
     {
-        # Foreach expired certificate.
-        foreach ($expiredCertificate in $expiredCertificates)
+        # Foreach revoked certificate.
+        foreach ($revokedCertificate in $revokedCertificates)
         {
             # If limit is reached.
             if ($removedCertificates.Count -gt $Limit)
@@ -63,13 +63,13 @@ function Remove-CACertificateExpired
             }
 
             # Create arguments.
-            [string]$certutilArguments = ('-deleterow {0}' -f $expiredCertificate.RequestId);
+            [string]$certutilArguments = ('-deleterow {0}' -f $revokedCertificate.RequestId);
 
             # If whatif is not set.
-            if ($PSCmdlet.ShouldProcess($expiredCertificate.RequestId, 'Removing expired certificate'))
+            if ($PSCmdlet.ShouldProcess($revokedCertificate.RequestId, 'Removing revoked certificate'))
             {
                 # Write to log.
-                Write-CustomLog -Message ("Removing expired certificate with id '{0}'" -f $expiredCertificate.RequestId) -Level Verbose;
+                Write-CustomLog -Message ("Removing revoked  certificate with id '{0}'" -f $revokedCertificate.RequestId) -Level Verbose;
 
                 # Try to remove the certificate.
                 try
@@ -78,16 +78,16 @@ function Remove-CACertificateExpired
                     $null = Invoke-CertUtil -Arguments $certutilArguments -ErrorAction Stop;
 
                     # Add to removed certificates.
-                    $null = $removedCertificates.Add($expiredCertificate);
+                    $null = $removedCertificates.Add($revokedCertificate);
 
                     # Write to log.
-                    Write-CustomLog -Message ("Succesfully removed expired certificate with id '{0}'" -f $expiredCertificate.RequestId) -Level Verbose;
+                    Write-CustomLog -Message ("Succesfully removed revoked  certificate with id '{0}'" -f $revokedCertificate.RequestId) -Level Verbose;
                 }
                 # Something went wrong.
                 catch
                 {
                     # Write to log.
-                    Write-CustomLog -Message ("Failed to remove expired certificate with id '{0}'. {1}" -f $expiredCertificate.RequestId, $_.Exception.Message) -Level Warning;
+                    Write-CustomLog -Message ("Failed to remove revoked  certificate with id '{0}'. {1}" -f $revokedCertificate.RequestId, $_.Exception.Message) -Level Warning;
                 }
             }
             # Else whatif is set.
@@ -101,7 +101,7 @@ function Remove-CACertificateExpired
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing expired certificates from CA' -Type 'End';
+        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing revoked certificates from CA' -Type 'End';
 
         # Return the removed certificates.
         return $removedCertificates;
