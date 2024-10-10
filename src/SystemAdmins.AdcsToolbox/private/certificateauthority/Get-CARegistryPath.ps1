@@ -1,4 +1,4 @@
-function Get-CertSvcRegistryPath
+function Get-CARegistryPath
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Get-CertSvcRegistryPath
     .DESCRIPTION
         Return object with registry paths.
     .EXAMPLE
-        Get-CertSvcRegistryPath;
+        Get-CARegistryPath;
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]

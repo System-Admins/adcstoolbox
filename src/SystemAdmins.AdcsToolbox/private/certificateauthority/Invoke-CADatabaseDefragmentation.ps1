@@ -20,7 +20,7 @@ function Invoke-CADatabaseDefragmentation
         $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Starting to defragmenting the ADCS database' -Type 'Begin';
 
         # Get the CertSvc service status.
-        $serviceStatus = Get-CertSvcService;
+        $serviceStatus = Get-CAService;
 
         # If the service is running.
         if ($serviceStatus -eq 'Running')

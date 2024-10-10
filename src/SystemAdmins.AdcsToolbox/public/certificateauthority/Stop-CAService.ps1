@@ -1,4 +1,4 @@
-function Stop-CertSvcService
+function Stop-CAService
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Stop-CertSvcService
     .DESCRIPTION
         Returns nothing.
     .EXAMPLE
-        Stop-CertSvcService;
+        Stop-CAService;
     #>
     [cmdletbinding()]
     [OutputType([void])]

@@ -87,7 +87,7 @@ function Test-ModulePrerequisite
         }
 
         # Test if the Active Directory Certificate Services role is installed.
-        $isCertSvcInstalled = Test-CertSvcInstalled;
+        $isCertSvcInstalled = Test-CAInstalled;
 
         # If the Active Directory Certificate Services role is not installed.
         if ($false -eq $isCertSvcInstalled)

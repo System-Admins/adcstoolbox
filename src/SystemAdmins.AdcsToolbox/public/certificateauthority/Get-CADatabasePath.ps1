@@ -20,7 +20,7 @@ function Get-CADatabasePath
         $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database paths' -Type 'Begin';
 
         # Get the registry path.
-        [pscustomobject]$registryPath = Get-CertSvcRegistryPath;
+        [pscustomobject]$registryPath = Get-CARegistryPath;
 
         # Object to store paths.
         [pscustomobject]$paths = [pscustomobject]@{

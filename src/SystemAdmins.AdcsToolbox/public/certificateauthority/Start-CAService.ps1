@@ -1,4 +1,4 @@
-function Start-CertSvcService
+function Start-CAService
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Start-CertSvcService
     .DESCRIPTION
         Returns nothing.
     .EXAMPLE
-        Start-CertSvcService;
+        Start-CAService;
     #>
     [cmdletbinding()]
     [OutputType([void])]

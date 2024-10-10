@@ -1,4 +1,4 @@
-function Get-CertSvcService
+function Get-CAService
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Get-CertSvcService
     .DESCRIPTION
         Returns "Running" or "Stopped".
     .EXAMPLE
-        Get-CertSvcService;
+        Get-CAService;
     #>
     [cmdletbinding()]
     [OutputType([string])]

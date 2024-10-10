@@ -64,7 +64,7 @@ function Backup-CADatabase
         }
 
         # Get the CertSvc service status.
-        $serviceStatus = Get-CertSvcService;
+        $serviceStatus = Get-CAService;
 
         # If the service is not running.
         if ($serviceStatus -ne 'Running')

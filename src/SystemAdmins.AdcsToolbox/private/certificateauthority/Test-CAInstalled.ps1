@@ -1,4 +1,4 @@
-function Test-CertSvcInstalled
+function Test-CAInstalled
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Test-CertSvcInstalled
     .DESCRIPTION
         Return true or false.
     .EXAMPLE
-        Test-CertSvcInstalled;
+        Test-CAInstalled;
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]

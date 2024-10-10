@@ -14,7 +14,7 @@ function Set-CACrlConfig
     (
         # Period units.
         [Parameter(Mandatory = $false)]
-        [ValidateRange(1, [int]::MaxValue)]
+        [ValidateRange(0, [int]::MaxValue)]
         [int]$PeriodUnits,
 
         # Period.
@@ -24,7 +24,7 @@ function Set-CACrlConfig
 
         # Delta period units.
         [Parameter(Mandatory = $false)]
-        [ValidateRange(1, [int]::MaxValue)]
+        [ValidateRange(0, [int]::MaxValue)]
         [int]$DeltaPeriodUnits,
 
         # Delta period.
@@ -34,7 +34,7 @@ function Set-CACrlConfig
 
         # Overlap units.
         [Parameter(Mandatory = $false)]
-        [ValidateRange(1, [int]::MaxValue)]
+        [ValidateRange(0, [int]::MaxValue)]
         [int]$OverlapUnits,
 
         # Overlap period.
@@ -44,7 +44,7 @@ function Set-CACrlConfig
 
         # Delta overlap units.
         [Parameter(Mandatory = $false)]
-        [ValidateRange(1, [int]::MaxValue)]
+        [ValidateRange(0, [int]::MaxValue)]
         [int]$DeltaOverlapUnits,
 
         # Delta overlap period.
@@ -63,7 +63,7 @@ function Set-CACrlConfig
         $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Setting CRL configuration on certificate authority' -Type 'Begin';
 
         # Get the registry path.
-        [pscustomobject]$registryPath = Get-CertSvcRegistryPath;
+        [pscustomobject]$registryPath = Get-CARegistryPath;
     }
     PROCESS
     {
@@ -74,7 +74,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL period units to "{0}"' -f $PeriodUnits) -Level Verbose;
 
             # Set period units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriodUnits' -Value $PeriodUnits;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriodUnits' -Value $PeriodUnits -Force;
         }
 
         # Set period.
@@ -84,7 +84,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL period to "{0}"' -f $Period) -Level Verbose;
 
             # Set period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriod' -Value $Period;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriod' -Value $Period -Force;
         }
 
         # Set delta period units.
@@ -94,7 +94,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta period units to "{0}"' -f $DeltaPeriodUnits) -Level Verbose;
 
             # Set delta period units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriodUnits' -Value $DeltaPeriodUnits;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriodUnits' -Value $DeltaPeriodUnits -Force;
         }
 
         # Set delta period.
@@ -104,7 +104,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta period to "{0}"' -f $DeltaPeriod) -Level Verbose;
 
             # Set delta period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriod' -Value $DeltaPeriod;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriod' -Value $DeltaPeriod -Force;
         }
 
         # Set overlap units.
@@ -114,7 +114,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL overlap units to "{0}"' -f $OverlapUnits) -Level Verbose;
 
             # Set overlap units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapUnits' -Value $OverlapUnits;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapUnits' -Value $OverlapUnits -Force;
         }
 
         # Set overlap period.
@@ -124,7 +124,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL overlap period to "{0}"' -f $OverlapPeriod) -Level Verbose;
 
             # Set overlap period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapPeriod' -Value $OverlapPeriod;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapPeriod' -Value $OverlapPeriod -Force;
         }
 
         # Set delta overlap units.
@@ -134,7 +134,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta overlap units to "{0}"' -f $DeltaOverlapUnits) -Level Verbose;
 
             # Set delta overlap units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapUnits' -Value $DeltaOverlapUnits;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapUnits' -Value $DeltaOverlapUnits -Force;
         }
 
         # Set delta overlap period.
@@ -144,7 +144,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta overlap period to "{0}"' -f $DeltaOverlapPeriod) -Level Verbose;
 
             # Set delta overlap period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapPeriod' -Value $DeltaOverlapPeriod;
+            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapPeriod' -Value $DeltaOverlapPeriod -Force;
         }
 
         # Set revocation check.
@@ -157,7 +157,7 @@ function Set-CACrlConfig
                 Write-CustomLog -Message 'Enabling CRL revocation check' -Level Verbose;
 
                 # Set revocation check.
-                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 2;
+                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 2 -Force;
             }
             # If the revocation check should b disabled.
             else
@@ -166,7 +166,7 @@ function Set-CACrlConfig
                 Write-CustomLog -Message 'Disabling CRL revocation check' -Level Verbose;
 
                 # Set revocation check.
-                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 10;
+                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 10 -Force;
             }
         }
     }
