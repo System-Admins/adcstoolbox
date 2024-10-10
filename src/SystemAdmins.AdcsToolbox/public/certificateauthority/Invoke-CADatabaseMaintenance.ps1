@@ -72,6 +72,9 @@ function Invoke-CADatabaseMaintenance
             # If the CRL config file path dont exist.
             if (-not (Test-Path -Path $originalCrlConfigFilePath -PathType Leaf))
             {
+                # Write to log.
+                Write-CustomLog -Message ('Original (backup) CRL configuration file does not exist. Creating file at path {0}' -f $originalCrlConfigFilePath) -Level Verbose;
+
                 # Save the original CRL configuration to a file.
                 $null = $originalCrlConfig | Export-Clixml -Path $originalCrlConfigFilePath -Force;
             }
