@@ -5,8 +5,14 @@ function Invoke-CADatabaseMaintenance
         Start AD CS database cleanup.
     .DESCRIPTION
         Return nothing.
+    .PARAMETER CertificateRemovalDate
+        Date to remove expired, denied, failed and revoked certificates/requests from.
+    .PARAMETER BackupFolderPath
+        Path to the backup folder.
+    .PARAMETER Confirm
+        Confirm the action.
     .EXAMPLE
-        Invoke-CADatabaseMaintenance;
+        Invoke-CADatabaseMaintenance -CertificateRemovalDate (Get-Date).AddMonths(-3) -BackupFolderPath 'C:\ADCSBackup' -Confirm;
     #>
     [cmdletbinding()]
     [OutputType([void])]
@@ -100,8 +106,8 @@ function Invoke-CADatabaseMaintenance
             $null = Publish-CACrl;
 
             # Remove expired and revoked certificates.
-            Remove-CACertificateExpired -ExpireDate $CertificateRemovalDate;
-            Remove-CACertificateRevoked -RevokedDate $CertificateRemovalDate;
+            Remove-CACertificateExpired -Date $CertificateRemovalDate;
+            Remove-CACertificateRevoked -Date $CertificateRemovalDate;
 
             # Stop the service.
             Stop-CAService;

@@ -5,6 +5,8 @@ function Invoke-CertUtil
         Invoke certificate utility (certutil.exe).
     .DESCRIPTION
         Return output from the certificate utility.
+    .PARAMETER Arguments
+        Arguments to pass to the cert
     .EXAMPLE
         Invoke-CertUtil;
     .EXAMPLE

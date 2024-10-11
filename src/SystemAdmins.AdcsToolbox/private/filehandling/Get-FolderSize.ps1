@@ -5,8 +5,18 @@ function Get-FolderSize
         Get the size of a folder.
     .DESCRIPTION
         Return the size of a folder.
+    .PARAMETER Path
+        Path to the folder.
+    .PARAMETER FileTypeInclude
+        Only certain file types.
+    .PARAMETER FileNameInclude
+        Only certain file names.
     .EXAMPLE
-        Get-FolderSize;
+        Get-FolderSize -Path 'C:\Temp';
+    .EXAMPLE
+        Get-FolderSize -Path 'C:\Temp' -FileTypeInclude '.txt', '.log';
+    .EXAMPLE
+        Get-FolderSize -Path 'C:\Temp' -FileNameInclude 'file1.txt', 'file2.log';
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]

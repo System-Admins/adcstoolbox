@@ -5,8 +5,12 @@ function Get-UserInput
         Get user input.
     .DESCRIPTION
         Validate user input and return.
+    .PARAMETER Question
+        Ask the user a question.
+    .PARAMETER Options
+        Options to choose from.
     .EXAMPLE
-        Get-UserInput;
+        Get-UserInput -Question 'Choose an option' -Options 'Option1', 'Option2', 'Option3';
     #>
     [cmdletbinding()]
     [OutputType([string[]])]

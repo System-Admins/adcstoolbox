@@ -5,6 +5,10 @@ function Backup-CADatabase
         Backup certificate authority.
     .DESCRIPTION
         Creates a folder and backup the Active Directory Certificate Services database to the folder.
+    .PARAMETER Path
+        Backup path.
+    .PARAMETER PrivateKey
+        Backup private key.
     .EXAMPLE
         Backup-CADatabase -Path 'C:\Backup';
     .EXAMPLE

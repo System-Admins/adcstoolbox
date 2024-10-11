@@ -5,19 +5,21 @@ function Get-CACertificateExpired
         Get expired certificates.
     .DESCRIPTION
         Return array list of expired certificates.
+    .PARAMETER Date
+        Date to get certificate up-to. Default is today.
     .EXAMPLE
         Get-CACertificateExpired;
     .EXAMPLE
-        Get-CACertificateExpired -ExpireDate (Get-Date).AddDays(-30);
+        Get-CACertificateExpired -Date (Get-Date).AddDays(-30);
     #>
     [cmdletbinding()]
-    [OutputType([string])]
+    [OutputType([System.Collections.ArrayList])]
     param
     (
         # Date to get expired certificates up-to. Default is today.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateScript({ $_ -le (Get-Date) })]
-        [DateTime]$ExpireDate = (Get-Date)
+        [DateTime]$Date = (Get-Date)
     )
 
     BEGIN
@@ -34,10 +36,10 @@ function Get-CACertificateExpired
     PROCESS
     {
         # If date is set.
-        if ($PSBoundParameters.ContainsKey('ExpireDate'))
+        if ($PSBoundParameters.ContainsKey('Date'))
         {
             # Contruct the arguments.
-            $certUtilArguments = ('-view -restrict "Certificate Expiration Date < {0}" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode" csv' -f $ExpireDate.ToString("dd'/'MM'/'yyyy"));
+            $certUtilArguments = ('-view -restrict "Certificate Expiration Date < {0}" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode" csv' -f $Date.ToString("dd'/'MM'/'yyyy"));
         }
         # Else use default.
         else

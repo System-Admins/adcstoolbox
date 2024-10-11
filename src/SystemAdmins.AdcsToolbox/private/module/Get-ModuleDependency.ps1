@@ -5,13 +5,21 @@ function Get-ModuleDependency
         Test and import if required modules is installed.
     .DESCRIPTION
         Return true or false.
+    .PARAMETER Modules
+        Required modules.
     .EXAMPLE
-        Get-ModuleDependency;
+        Get-ModuleDependency -Modules 'ADCSAdministration', 'ADCSDeployment';
     #>
     [cmdletbinding()]
     [OutputType([bool])]
     param
     (
+        # Required modules.
+        [Parameter(Mandatory = $false)]
+        [string[]]$Modules = @(
+            'ADCSAdministration',
+            'ADCSDeployment'
+        )
     )
 
     BEGIN
@@ -19,19 +27,13 @@ function Get-ModuleDependency
         # Write to log.
         $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if required modules are installed' -Type 'Begin';
 
-        # Modules to check.
-        $modules = @(
-            'ADCSAdministration',
-            'ADCSDeployment'
-        );
-
         # Boolean to return.
         [bool]$isValid = $true;
     }
     PROCESS
     {
         # Foreach module.
-        foreach ($module in $modules)
+        foreach ($module in $Modules)
         {
             # Try to get module.
             $moduleInstalled = Get-Module -Name $module -ListAvailable;

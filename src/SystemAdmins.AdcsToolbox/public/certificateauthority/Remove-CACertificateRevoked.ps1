@@ -5,8 +5,14 @@ function Remove-CACertificateRevoked
         Remove revoked certificates.
     .DESCRIPTION
         This will remove revoked ADCS certificates that are expired up to a certain date.
+    .PARAMETER Date
+        Date to remove revoked certificates up-to. Default is today.
+    .PARAMETER Limit
+        Limit the number of certificates to remove.
     .EXAMPLE
-        Remove-CACertificateExpired;
+        Remove-CACertificateExpired -Limit 100;
+        .EXAMPLE
+        Remove-CACertificateExpired -Date (Get-Date).AddDays(-30) -Limit 100;
     #>
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([string])]
@@ -35,7 +41,7 @@ function Remove-CACertificateRevoked
         if ($PSBoundParameters.ContainsKey('RevokedDate'))
         {
             # Get revoked certificates.
-            $revokedCertificates = Get-CACertificateRevoked -RevokedDate $RevokedDate;
+            $revokedCertificates = Get-CACertificateRevoked -Date $RevokedDate;
         }
         # Else use default.
         else

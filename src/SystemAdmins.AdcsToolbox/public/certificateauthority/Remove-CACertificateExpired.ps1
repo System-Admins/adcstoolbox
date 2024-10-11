@@ -35,7 +35,7 @@ function Remove-CACertificateExpired
         if ($PSBoundParameters.ContainsKey('ExpireDate'))
         {
             # Get expired certificates.
-            $expiredCertificates = Get-CACertificateExpired -ExpireDate $ExpireDate;
+            $expiredCertificates = Get-CACertificateExpired -Date $ExpireDate;
         }
         # Else use default.
         else

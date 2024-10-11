@@ -5,8 +5,26 @@ function Set-CACrlConfig
         Set certificate authority revocation configuration.
     .DESCRIPTION
         Returns nothing.
+    .PARAMETER PeriodUnits
+        Period units.
+    .PARAMETER Period
+        Period.
+    .PARAMETER DeltaPeriodUnits
+        Delta period units.
+    .PARAMETER DeltaPeriod
+        Delta period.
+    .PARAMETER OverlapUnits
+        Overlap units.
+    .PARAMETER OverlapPeriod
+        Overlap period.
+    .PARAMETER DeltaOverlapUnits
+        Delta overlap units.
+    .PARAMETER DeltaOverlapPeriod
+        Delta overlap period.
+    .PARAMETER RevocationCheck
+        Disable or enable revocation check.
     .EXAMPLE
-        Set-CACrlConfig;
+        Set-CACrlConfig -PeriodUnits 2 -Period Weeks -DeltaPeriodUnits 0 -DeltaPeriod Days -OverlapUnits 0 -OverlapPeriod Weeks -DeltaOverlapUnits 0 -DeltaOverlapPeriod Days -RevocationCheck $true;
     #>
     [cmdletbinding()]
     [OutputType([void])]

@@ -5,17 +5,21 @@ function Get-CACertificateRevoked
         Get revoked certificates.
     .DESCRIPTION
         Return array list of revoked certificates.
+    .PARAMETER Date
+        Date to get certificate up-to. Default is today.
     .EXAMPLE
         Get-CACertificateRevoked;
+    .EXAMPLE
+        Get-CACertificateRevoked -Date (Get-Date).AddDays(-30);
     #>
     [cmdletbinding()]
-    [OutputType([string])]
+    [OutputType([System.Collections.ArrayList])]
     param
     (
         # Date to get revoked certificates up-to. Default is today.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateScript({ $_ -le (Get-Date) })]
-        [DateTime]$RevokedDate = (Get-Date)
+        [DateTime]$Date = (Get-Date)
     )
 
     BEGIN
@@ -45,10 +49,10 @@ function Get-CACertificateRevoked
     PROCESS
     {
         # If date is set.
-        if ($PSBoundParameters.ContainsKey('RevokedDate'))
+        if ($PSBoundParameters.ContainsKey('Date'))
         {
             # Contruct the arguments.
-            $certUtilArguments = ('-view -restrict "Disposition=21,Revocation Date < {0}" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode,Revocation Reason,Revocation Date" csv' -f $RevokedDate.ToString("dd'/'MM'/'yyyy"));
+            $certUtilArguments = ('-view -restrict "Disposition=21,Revocation Date < {0}" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode,Revocation Reason,Revocation Date" csv' -f $Date.ToString("dd'/'MM'/'yyyy"));
         }
         # Else use default.
         else
