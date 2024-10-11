@@ -1,0 +1,170 @@
+[
+    {
+        "eventId": 0,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": ""
+    },
+    {
+        "eventId": 1,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Not enough disk space to complete AD CS database backup"
+    },
+    {
+        "eventId": 2,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "The CertSvc service is not running. The service must be running to backup the database"
+    },
+    {
+        "eventId": 3,
+        "entryType": "Warning",
+        "logName": "Application",
+        "message": "Failed to backup the database with the private key"
+    },
+    {
+        "eventId": 4,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Failed to backup the AD CS database"
+    },
+    {
+        "eventId": 5,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Successfully made a backup of the database including the private key"
+    },
+    {
+        "eventId": 6,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Successfully made a backup of the AD CS database"
+    },
+    {
+        "eventId": 7,
+        "entryType": "Warning",
+        "logName": "Application",
+        "message": "The AD CS database is over 25 GB, this is not best practice"
+    },
+    {
+        "eventId": 8,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Defragmentation of the AD CS database failed"
+    },
+    {
+        "eventId": 9,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Defragmentation of the AD CS database successed"
+    },
+    {
+        "eventId": 10,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Defragmentation of the AD CS database started"
+    },
+    {
+        "eventId": 11,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Starting a backup of the AD CS database without private key"
+    },
+    {
+        "eventId": 12,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Starting a backup of the AD CS database with private key"
+    },
+    {
+        "eventId": 31,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "The CertSvc service is not found on this machine"
+    },
+    {
+        "eventId": 32,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The CertSvc service was started"
+    },
+    {
+        "eventId": 33,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Fail to start the CertSvc service"
+    },
+    {
+        "eventId": 34,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The CertSvc service was stopped"
+    },
+    {
+        "eventId": 35,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "Fail to stop the CertSvc service"
+    },
+    {
+        "eventId": 36,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "The CertSvc (AD CS) role is not installed on this machine"
+    },
+    {
+        "eventId": 61,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "AD CS revocation configuration list was published"
+    },
+    {
+        "eventId": 62,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The AD CS revocation configuration list was updated"
+    },
+    {
+        "eventId": 91,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The current user is not elevate as local administrator"
+    },
+    {
+        "eventId": 121,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The expired certificate was removed"
+    },
+    {
+        "eventId": 122,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The revoked certificate was removed"
+    },
+    {
+        "eventId": 123,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The denied request was removed"
+    },
+    {
+        "eventId": 124,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The failed request was removed"
+    },
+    {
+        "eventId": 125,
+        "entryType": "Warning",
+        "logName": "Application",
+        "message": "The certificate was could not be removed"
+    },
+    {
+        "eventId": 126,
+        "entryType": "Warning",
+        "logName": "Application",
+        "message": "The request was could not be removed"
+    }
+]

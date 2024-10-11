@@ -36,6 +36,9 @@ function Get-CAService
         # Something went wrong.
         catch
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 31;
+
             # Throw execption.
             throw ("Service '{0}' dont exist. {1}" -f $serviceName, $_.Exception.Message);
         }

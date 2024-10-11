@@ -41,6 +41,9 @@ function Test-CAInstalled
         {
             # Write to log.
             Write-CustomLog -Message 'CertSvc role is not installed' -Level Verbose;
+
+            # Write to event log.
+            Write-CustomEventLog -EventId 36;
         }
     }
     END

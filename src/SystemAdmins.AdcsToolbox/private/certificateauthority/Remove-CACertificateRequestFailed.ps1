@@ -88,10 +88,16 @@ function Remove-CACertificateRequestFailed
 
                     # Write to log.
                     Write-CustomLog -Message ("Succesfully removed failed request with id '{0}'" -f $failedRequest.RequestId) -Level Verbose;
+
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 124 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
                 }
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 126 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
+
                     # Write to log.
                     Write-CustomLog -Message ("Failed to remove failed request with id '{0}'. {1}" -f $failedRequest.RequestId, $_.Exception.Message) -Level Warning;
                 }

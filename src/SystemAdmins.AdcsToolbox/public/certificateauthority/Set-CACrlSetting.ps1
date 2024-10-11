@@ -187,6 +187,9 @@ function Set-CACrlConfig
                 Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 10 -Force;
             }
         }
+
+        # Write to event log.
+        Write-CustomEventLog -EventId 62 -AdditionalMessage ($PSBoundParameters);
     }
     END
     {

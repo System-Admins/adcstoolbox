@@ -88,10 +88,16 @@ function Remove-CACertificateRevoked
 
                     # Write to log.
                     Write-CustomLog -Message ("Succesfully removed revoked  certificate with id '{0}'" -f $revokedCertificate.RequestId) -Level Verbose;
+
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 122 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
                 }
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 125 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
+
                     # Write to log.
                     Write-CustomLog -Message ("Failed to remove revoked  certificate with id '{0}'. {1}" -f $revokedCertificate.RequestId, $_.Exception.Message) -Level Warning;
                 }

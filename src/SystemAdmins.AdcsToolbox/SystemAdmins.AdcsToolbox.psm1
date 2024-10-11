@@ -20,6 +20,9 @@ else
     $scriptPath = $PSScriptRoot;
 }
 
+# Set script variable.
+$Script:scriptPath = $scriptPath;
+
 # Paths to the private and public folders.
 [string]$privatePath = Join-Path -Path $scriptPath -ChildPath 'private';
 [string]$publicPath = Join-Path -Path $scriptPath -ChildPath 'public';
@@ -67,11 +70,22 @@ Write-CustomLog -Message ("Script path is '{0}'" -f $scriptPath) -Level Verbose;
 # Get all the functions in the public section.
 $publicFunctions = $publicPs1Files.Basename;
 
-# Set script variable.
-$Script:scriptPath = $scriptPath;
-
 # Test if the module prerequisites are fulfilled.
 $null = Test-ModulePrerequisite;
+
+# Global variables.
+## Module.
+$script:ModuleName = 'AdcsToolbox';
+
+## Logging.
+$script:ModuleLogFolder = 'C:\ProgramData\SystemAdmins\AdcsToolbox\Logs';
+$script:ModuleLogFileName = 'AdcsToolbox.log';
+$script:ModuleLogPath = Join-Path -Path $ModuleLogFolder -ChildPath $ModuleLogFileName;
+$script:ModuleEventLogJsonFilePath = ('{0}\private\module\eventlog.json' -f $Script:scriptPath);
+$script:ModuleEventLogTable = Import-ModuleEventLogFile -Path $script:ModuleEventLogJsonFilePath;
+
+## Backup.
+$script:ModuleBackupFolder = ('C:\ProgramData\SystemAdmins\AdcsToolbox\Backup\{0}' -f (Get-Date -Format 'yyyyMMdd_HHmmss'));
 
 # Foreach function in the public functions.
 foreach ($exportFunction in $publicFunctions)

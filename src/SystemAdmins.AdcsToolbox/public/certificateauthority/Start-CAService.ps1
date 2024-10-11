@@ -42,6 +42,9 @@ function Start-CAService
                 # Try to stop the service.
                 try
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 32;
+
                     # Stop the service.
                     $null = Start-Service -Name $serviceName -ErrorAction Stop;
 
@@ -51,6 +54,9 @@ function Start-CAService
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 33;
+
                     # Throw execption.
                     throw ("Failed to start service '{0}'. {1}" -f $serviceName, $_.Exception.Message);
                 }
@@ -59,6 +65,9 @@ function Start-CAService
         # Something went wrong.
         catch
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 33;
+
             throw ("Something went wrong while starting the service '{0}'. {1}" -f $serviceName, $_.Exception.Message);
         }
     }

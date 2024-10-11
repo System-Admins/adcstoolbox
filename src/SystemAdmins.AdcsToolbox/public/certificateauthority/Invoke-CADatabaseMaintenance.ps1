@@ -26,7 +26,7 @@ function Invoke-CADatabaseMaintenance
         # Path to the backup folder.
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$BackupFolderPath = 'C:\ADCSBackup',
+        [string]$BackupFolderPath = $script:ModuleBackupFolder,
 
         # Confirm the action.
         [Parameter(Mandatory = $false)]
@@ -55,11 +55,14 @@ function Invoke-CADatabaseMaintenance
             }
         }
 
+        # Write to event log.
+        Write-CustomEventLog
+
         # Create the backup folder.
         $null = New-Item -Path $BackupFolderPath -ItemType Directory -Force -ErrorAction Stop;
 
         # File path for original CRL configuration.
-        $originalCrlConfigFilePath = ('{0}\{1}_OriginalCrlConfig.xml' -f $BackupFolderPath, (Get-Date -Format 'yyyyMMdd'));
+        $originalCrlConfigFilePath = ("{0}\crlconfig.xml" -f $BackupFolderPath);
     }
     PROCESS
     {
@@ -70,7 +73,7 @@ function Invoke-CADatabaseMaintenance
         if ($serviceStatus -eq 'Running')
         {
             # Backup the database.
-            $null = Backup-CADatabase -Path $BackupFolderPath -PrivateKey;
+            $null = Backup-CADatabase -Path ("{0}\Database" -f $BackupFolderPath) -PrivateKey;
 
             # Get current CRL configuraiton.
             $originalCrlConfig = Get-CACrlConfig;

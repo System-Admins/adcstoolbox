@@ -41,10 +41,16 @@ function Stop-CAService
 
                     # Write to log.
                     Write-CustomLog -Message ("Service '{0}' stopped" -f $serviceName) -Level Verbose;
+
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 34;
                 }
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 35;
+
                     # Throw execption.
                     throw ("Failed to stop service '{0}'. {1}" -f $serviceName, $_.Exception.Message);
                 }
@@ -59,8 +65,11 @@ function Stop-CAService
         # Something went wrong.
         catch
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 31;
+
             # Throw execption.
-            throw ("Something went wrong while trying to stop the service dont exist. {1}" -f $serviceName, $_.Exception.Message);
+            throw ('Something went wrong while trying to stop the service, dont exist. {1}' -f $serviceName, $_.Exception.Message);
         }
     }
     END

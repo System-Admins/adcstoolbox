@@ -20,7 +20,7 @@ function Publish-CACrl
         $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Publish certificate authority CRL' -Type 'Begin';
 
         # CertUtil argument.
-        [string]$certUtilArguments = ' -crl';
+        [string]$certUtilArguments = '-crl';
     }
     PROCESS
     {
@@ -29,6 +29,9 @@ function Publish-CACrl
 
         # Invoke certutil.
         $result = Invoke-CertUtil -Arguments $certUtilArguments;
+
+        # Write to event log.
+        Write-CustomEventLog -EventId 61;
     }
     END
     {

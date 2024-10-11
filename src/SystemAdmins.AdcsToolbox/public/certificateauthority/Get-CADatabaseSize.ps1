@@ -43,6 +43,13 @@ function Get-CADatabaseSize
 
         # Calculate total size in GB.
         $sizes.TotalGb = [math]::Round($sizes.Total / 1GB, 2);
+
+        # If size is over 25 GB.
+        if ($sizes.TotalGb -ge 25)
+        {
+            # Write to event log.
+            Write-CustomEventLog -EventId 7 -AdditionalMessage ('Database size is {0} GB' -f $sizes.TotalGb);
+        }
     }
     END
     {

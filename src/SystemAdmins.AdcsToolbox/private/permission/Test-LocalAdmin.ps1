@@ -38,6 +38,9 @@ function Test-LocalAdmin
         {
             # Write to log.
             Write-CustomLog -Message ('The current user is not a local administrator') -Level Verbose;
+
+            # Write to event log.
+            Write-CustomEventLog -EventId 91;
         }
     }
     END

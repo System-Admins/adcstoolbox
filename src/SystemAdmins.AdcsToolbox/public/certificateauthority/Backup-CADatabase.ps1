@@ -50,6 +50,9 @@ function Backup-CADatabase
         # If disk space is less than database size.
         if ($diskSpace.FreeSpace -lt $databaseSize.Total)
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 1 -AdditionalMessage ('Free space is {0} GB, required space is {1} GB' -f $diskSpace.FreeSpaceInGB, $databaseSize.TotalGb);
+
             # Throw exception.
             throw ('Not enough disk space, free space is {0} GB, required space is {1} GB' -f $diskSpace.FreeSpaceInGB, $databaseSize.TotalGb);
         }
@@ -73,6 +76,9 @@ function Backup-CADatabase
         # If the service is not running.
         if ($serviceStatus -ne 'Running')
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 2;
+
             # Throw exception.
             throw ('The CertSvc service is not running. The service must be running to backup the database');
         }
@@ -91,6 +97,9 @@ function Backup-CADatabase
         # If private key backup is requested.
         if ($true -eq $PrivateKey)
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 11;
+
             # Try to backup the private key.
             try
             {
@@ -105,12 +114,18 @@ function Backup-CADatabase
 
                 # Set private key path.
                 $result.PrivateKeyPath = ('{0}\{1}.p12' -f $Path, $commonName);
+
+                # Write to event log.
+                Write-CustomEventLog -EventId 5;
             }
             # Something went wrong.
             catch
             {
                 # Write to log.
                 Write-CustomLog -Message ("Failed to backup the database including the private key to the directory '{0}'. Will try without the private key" -f $Path) -Level Warning;
+
+                # Write to event log.
+                Write-CustomEventLog -EventId 3;
 
                 # Backup without private key.
                 Backup-CA -Path $Path;
@@ -119,6 +134,9 @@ function Backup-CADatabase
         # Else backup without private key.
         else
         {
+            # Write to event log.
+            Write-CustomEventLog -EventId 12;
+
             # Try to backup the database.
             try
             {
@@ -130,10 +148,16 @@ function Backup-CADatabase
 
                 # Write to log.
                 Write-CustomLog -Message ("Successfully made a backup of the database without the private key to the directory '{0}'" -f $Path) -Level Verbose;
+
+                # Write to event log.
+                Write-CustomEventLog -EventId 6;
             }
             # Something went wrong.
             catch
             {
+                # Write to event log.
+                Write-CustomEventLog -EventId 4;
+
                 # Throw exception.
                 throw ('Failed to backup the database. {0}' -f $_.Exception.Message);
             }

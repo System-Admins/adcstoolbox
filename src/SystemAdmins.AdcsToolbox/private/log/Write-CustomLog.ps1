@@ -58,7 +58,7 @@ function Write-CustomLog
 
         # (Optional) Path to log file.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [string]$Path = $script:logFilePath,
+        [string]$Path = $script:ModuleLogPath,
 
         # (Optional) Log level.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]

@@ -88,10 +88,16 @@ function Remove-CACertificateRequestDenied
 
                     # Write to log.
                     Write-CustomLog -Message ("Succesfully removed denied request with id '{0}'" -f $deniedRequest.RequestId) -Level Verbose;
+
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 123 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
                 }
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 126 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
+
                     # Write to log.
                     Write-CustomLog -Message ("Failed to remove denied request with id '{0}'. {1}" -f $deniedRequest.RequestId, $_.Exception.Message) -Level Warning;
                 }

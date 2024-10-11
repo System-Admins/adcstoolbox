@@ -26,7 +26,12 @@ function Remove-CACertificateExpired
         # Limit the number of certificates to remove.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [int]$Limit = 150000
+        [int]$Limit = 150000,
+
+        # Path for exporting the removed certificates.
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string]$ExportPath = 'C:\Temp\RemovedCertificates.csv'
     )
 
     BEGIN
@@ -86,12 +91,18 @@ function Remove-CACertificateExpired
                     # Add to removed certificates.
                     $null = $removedCertificates.Add($expiredCertificate);
 
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 121 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
+
                     # Write to log.
                     Write-CustomLog -Message ("Succesfully removed expired certificate with id '{0}'" -f $expiredCertificate.RequestId) -Level Verbose;
                 }
                 # Something went wrong.
                 catch
                 {
+                    # Write to event log.
+                    Write-CustomEventLog -EventId 125 -AdditionalMessage ("Request ID '{0}'" -f $expiredCertificate.RequestId);
+
                     # Write to log.
                     Write-CustomLog -Message ("Failed to remove expired certificate with id '{0}'. {1}" -f $expiredCertificate.RequestId, $_.Exception.Message) -Level Warning;
                 }
