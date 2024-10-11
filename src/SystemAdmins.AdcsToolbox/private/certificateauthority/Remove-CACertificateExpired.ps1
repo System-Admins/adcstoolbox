@@ -5,8 +5,14 @@ function Remove-CACertificateExpired
         Remove expired certificates.
     .DESCRIPTION
         This will remove expired ADCS certificates that are expired up to a certain date.
+    .PARAMETER Date
+        Date to remove expired certificates up-to. Default is today.
+    .PARAMETER Limit
+        Limit the number of certificates to remove.
     .EXAMPLE
-        Remove-CACertificateExpired;
+        Remove-CACertificateExpired -Limit 100;
+    .EXAMPLE
+        Remove-CACertificateExpired -Date (Get-Date).AddDays(-30) -Limit 100;
     #>
     [CmdletBinding(SupportsShouldProcess = $true)]
     [OutputType([string])]
