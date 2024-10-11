@@ -105,9 +105,11 @@ function Invoke-CADatabaseMaintenance
             # Publish the CRL.
             $null = Publish-CACrl;
 
-            # Remove expired and revoked certificates.
-            Remove-CACertificateExpired -Date $CertificateRemovalDate;
-            Remove-CACertificateRevoked -Date $CertificateRemovalDate;
+            # Remove expired, denied, failed and revoked certificates/requests.
+            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Failed;
+            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Denied;
+            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Expired;
+            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Revoked;
 
             # Stop the service.
             Stop-CAService;
