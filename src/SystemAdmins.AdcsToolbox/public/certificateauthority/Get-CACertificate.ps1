@@ -20,7 +20,7 @@ function Get-CACertificate
     param
     (
         # State of certificate/request (revoked, expired, denied, failed).
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateSet('Revoked', 'Expired', 'Denied', 'Failed')]
         [string]$State,
 
@@ -67,6 +67,17 @@ function Get-CACertificate
                 # Get failed requests.
                 $result = Get-CACertificateRequestFailed -Date $Date;
             }
+            # Else use default.
+            else
+            {
+                # Get certificates.
+                $result += [PSCustomObject]@{
+                    Revoked = Get-CACertificateRevoked -Date $Date;
+                    Expired = Get-CACertificateExpired -Date $Date;
+                    Denied = Get-CACertificateRequestDenied -Date $Date;
+                    Failed = Get-CACertificateRequestFailed -Date $Date;
+                };
+            }
         }
         # Else use default.
         else
@@ -94,6 +105,17 @@ function Get-CACertificate
             {
                 # Get failed requests.
                 $result = Get-CACertificateRequestFailed;
+            }
+            # Else use default.
+            else
+            {
+                # Get certificates.
+                $result += [PSCustomObject]@{
+                    Revoked = Get-CACertificateRevoked;
+                    Expired = Get-CACertificateExpired;
+                    Denied = Get-CACertificateRequestDenied;
+                    Failed = Get-CACertificateRequestFailed;
+                };
             }
         }
     }

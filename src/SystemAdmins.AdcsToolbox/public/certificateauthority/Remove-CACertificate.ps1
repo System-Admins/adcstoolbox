@@ -20,14 +20,18 @@ function Remove-CACertificate
     param
     (
         # State of certificate/request (revoked, expired, denied, failed).
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [ValidateSet('Revoked', 'Expired', 'Denied', 'Failed')]
         [string]$State,
 
         # Date to remove certificate up-to. Default is today.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateScript({ $_ -le (Get-Date) })]
-        [DateTime]$Date = (Get-Date)
+        [DateTime]$Date = (Get-Date),
+
+        # Confirm the action.
+        [Parameter(Mandatory = $false)]
+        [switch]$Confirm = $true
     )
 
     BEGIN
@@ -37,6 +41,23 @@ function Remove-CACertificate
 
         # Object array for the result.
         $result = New-Object System.Collections.ArrayList;
+
+        # Ask user to confirm.
+        if ($true -eq $Confirm)
+        {
+            # Get user input.
+            $userInput = Get-UserInput -Question 'Do you want to continue with removing certificate/requests in the AD CS? (Answer: Yes or No)' -Options 'Yes', 'No';
+
+            # If the user input is not 'Yes'.
+            if ($userInput -ne 'Yes')
+            {
+                # Write to log.
+                Write-CustomLog -Message 'User did not confirm the action' -Level Verbose;
+
+                # Exit script.
+                exit 1;
+            }
+        }
     }
     PROCESS
     {
@@ -67,6 +88,17 @@ function Remove-CACertificate
                 # Get failed requests.
                 $result = Remove-CACertificateRequestFailed -Date $Date;
             }
+            # Else use default.
+            else
+            {
+                # Get certificates.
+                $result += [PSCustomObject]@{
+                    Revoked = Remove-CACertificateRevoked -Date $Date;
+                    Expired = Remove-CACertificateExpired -Date $Date;
+                    Denied  = Remove-CACertificateRequestDenied -Date $Date;
+                    Failed  = Remove-CACertificateRequestFailed -Date $Date;
+                };
+            }
         }
         # Else use default.
         else
@@ -94,6 +126,17 @@ function Remove-CACertificate
             {
                 # Get failed requests.
                 $result = Remove-CACertificateRequestFailed;
+            }
+            # Else use default.
+            else
+            {
+                # Get certificates.
+                $result += [PSCustomObject]@{
+                    Revoked = Remove-CACertificateRevoked;
+                    Expired = Remove-CACertificateExpired;
+                    Denied  = Remove-CACertificateRequestDenied;
+                    Failed  = Remove-CACertificateRequestFailed;
+                };
             }
         }
     }
