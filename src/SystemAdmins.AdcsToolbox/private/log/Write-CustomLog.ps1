@@ -21,6 +21,8 @@ function Write-CustomLog
         (Optional) If the log message should not be added to a file.
     .PARAMETER IndentLevel
         (Optional) Indent level (only works when the level is console).
+    .PARAMETER NoIndent
+        (Optional) No ident level.
     .PARAMETER Color
         (Optional) Color of the message (only works when the level is console).
     .EXAMPLE
@@ -84,6 +86,10 @@ function Write-CustomLog
         # (Optional) Indent level (only works when the level is console).
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [int]$IndentLevel = 0,
+
+        # No ident level.
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [switch]$NoIndent,
 
         # (Optional) Color of the message (only works when the level is console).
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -210,31 +216,37 @@ function Write-CustomLog
             }
             'Console'
             {
-                # Prefix meessage.
-                [string]$prefixMessage = '';
-
-                # For each indent level.
-                for ($i = 0; $i -lt $IndentLevel; $i++)
+                # If indent level are required.
+                if ($false -eq $NoIndent)
                 {
-                    # Add indent.
-                    $prefixMessage += '  ';
+                    # Prefix meessage.
+                    [string]$prefixMessage = '';
+
+                    # For each indent level.
+                    for ($i = 0; $i -lt $IndentLevel; $i++)
+                    {
+                        # Add indent.
+                        $prefixMessage += '  ';
+                    }
+
+                    # If indent level is greater than 0.
+                    if ($IndentLevel -gt 0)
+                    {
+                        # Add message.
+                        $prefixMessage += ('{0}[-] ' -f $prefixMessage);
+                    }
+                    # Else indent level is 0.
+                    else
+                    {
+                        # Add message.
+                        $prefixMessage += ('{0}[+] ' -f $prefixMessage);
+                    }
+
+                    # Write to console.
+                    Write-Host -Object $prefixMessage -NoNewline;
                 }
 
-                # If indent level is greater than 0.
-                if ($IndentLevel -gt 0)
-                {
-                    # Add message.
-                    $prefixMessage += ('{0}[-] ' -f $prefixMessage);
-                }
-                # Else indent level is 0.
-                else
-                {
-                    # Add message.
-                    $prefixMessage += ('{0}[+] ' -f $prefixMessage);
-                }
 
-                # Write to console.
-                Write-Host -Object $prefixMessage -NoNewline;
                 Write-Host -Object $Message -ForegroundColor $Color;
             }
         }
