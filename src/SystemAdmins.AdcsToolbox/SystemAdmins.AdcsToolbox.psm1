@@ -78,8 +78,8 @@ $null = Test-ModulePrerequisite;
 $script:ModuleName = 'AdcsToolbox';
 
 ## Logging.
-$script:ModuleLogFolder = 'C:\ProgramData\SystemAdmins\AdcsToolbox\Logs';
-$script:ModuleLogFileName = 'AdcsToolbox.log';
+$script:ModuleLogFolder = 'C:\ProgramData\SystemAdmins\AdcsToolbox\Log';
+$script:ModuleLogFileName = ('{0}_AdcsToolbox.log' -f (Get-Date -Format 'yyyyMMddHHmmss'));
 $script:ModuleLogPath = Join-Path -Path $ModuleLogFolder -ChildPath $ModuleLogFileName;
 $script:ModuleEventLogJsonFilePath = ('{0}\private\module\eventlog.json' -f $Script:scriptPath);
 $script:ModuleEventLogTable = Import-ModuleEventLogFile -Path $script:ModuleEventLogJsonFilePath;
