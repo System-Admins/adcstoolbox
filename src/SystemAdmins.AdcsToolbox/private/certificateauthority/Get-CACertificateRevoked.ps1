@@ -25,7 +25,7 @@ function Get-CACertificateRevoked
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting expired certificates from CA' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting expired certificates from CA';
 
         # Arguments to be used with CertUtil.exe.
         $certUtilArguments = ('-view -restrict "Disposition=21" -out "RequestId,RequesterName,CommonName,CertificateTemplate,Certificate Expiration Date,CertificateHash,StatusCode,Revocation Reason,Revocation Date" csv');
@@ -122,7 +122,7 @@ function Get-CACertificateRevoked
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting revoked certificates from CA' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return the revoked certificates.
         return $revokedCertificates;

@@ -39,7 +39,7 @@ function Get-FolderSize
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get folder size' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get folder size';
 
         # Variable to store the size.
         [long]$folderSizeInBytes = 0;
@@ -102,7 +102,7 @@ function Get-FolderSize
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get folder size' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return result.
         return $result;

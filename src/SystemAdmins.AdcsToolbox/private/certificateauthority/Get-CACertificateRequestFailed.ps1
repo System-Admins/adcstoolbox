@@ -25,7 +25,7 @@ function Get-CACertificateRequestFailed
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting failed requests from CA' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting failed requests from CA';
 
         # Arguments to be used with CertUtil.exe.
         [string]$certUtilArguments = '';
@@ -96,7 +96,7 @@ function Get-CACertificateRequestFailed
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting failed requests from CA' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return the failed requests.
         return $failedRequests;

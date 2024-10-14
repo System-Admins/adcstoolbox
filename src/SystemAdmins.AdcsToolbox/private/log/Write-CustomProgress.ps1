@@ -12,12 +12,12 @@ function Write-CustomProgress
     .PARAMETER Type
         Start or end.
     .EXAMPLE
-        $progress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate' -Type 'Begin';
+        $progress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate';
         Write-CustomProgress -Id $progress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting all certificate' -Type 'End';
 
     #>
     [cmdletbinding()]
-    [OutputType([int])]
+    [OutputType([hashtable])]
     param
     (
         # Name of the function.
@@ -31,9 +31,9 @@ function Write-CustomProgress
         [string]$CurrentOperation,
 
         # Begin or end.
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateSet('Begin', 'End')]
-        [string]$Type,
+        [string]$Type = 'Begin',
 
         # Id of the progress.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
@@ -43,6 +43,13 @@ function Write-CustomProgress
 
     BEGIN
     {
+        # Create splat to return.
+        [hashtable]$splat = @{
+            ProgressId       = $ProgressId;
+            Activity         = $Activity;
+            CurrentOperation = $CurrentOperation;
+            Type             = 'End';
+        };
     }
     PROCESS
     {
@@ -70,8 +77,8 @@ function Write-CustomProgress
         # If type is "Begin".
         if ($Type -eq 'Begin')
         {
-            # Return id.
-            return $ProgressId;
+            # Return splat.
+            return $splat;
         }
     }
 }

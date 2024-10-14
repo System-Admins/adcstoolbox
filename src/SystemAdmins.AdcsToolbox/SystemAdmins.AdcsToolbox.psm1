@@ -75,17 +75,18 @@ $null = Test-ModulePrerequisite;
 
 # Global variables.
 ## Module.
-$script:ModuleName = 'AdcsToolbox';
+$script:ModuleName = 'SystemAdmins.AdcsToolbox';
 
 ## Logging.
-$script:ModuleLogFolder = 'C:\ProgramData\SystemAdmins\AdcsToolbox\Log';
+$script:ModuleProgramDataFolderPath = ('{0}\{1}' -f [System.Environment]::GetFolderPath('CommonApplicationData'), $script:ModuleName);
+$script:ModuleLogFolder = ('{0}\Log' -f $script:ModuleProgramDataFolderPath);
 $script:ModuleLogFileName = ('{0}_AdcsToolbox.log' -f (Get-Date -Format 'yyyyMMddHHmmss'));
 $script:ModuleLogPath = Join-Path -Path $ModuleLogFolder -ChildPath $ModuleLogFileName;
 $script:ModuleEventLogJsonFilePath = ('{0}\private\module\eventlog.json' -f $Script:scriptPath);
 $script:ModuleEventLogTable = Import-ModuleEventLogFile -Path $script:ModuleEventLogJsonFilePath;
 
 ## Backup.
-$script:ModuleBackupFolder = ('C:\ProgramData\SystemAdmins\AdcsToolbox\Backup\{0}' -f (Get-Date -Format 'yyyyMMdd_HHmmss'));
+$script:ModuleBackupFolder = ('{0}\Backup\{1}' -f $script:ModuleProgramDataFolderPath, (Get-Date -Format 'yyyyMMdd_HHmmss'));
 
 # Foreach function in the public functions.
 foreach ($exportFunction in $publicFunctions)

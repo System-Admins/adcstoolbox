@@ -78,7 +78,7 @@ function Set-CACrlConfig
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Setting CRL configuration on certificate authority' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Setting CRL configuration on certificate authority';
 
         # Get the registry path.
         [pscustomobject]$registryPath = Get-CARegistryPath;
@@ -194,6 +194,6 @@ function Set-CACrlConfig
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Setting CRL configuration on certificate authority' -Type 'End';
+        Write-CustomProgress @customProgress;
     }
 }

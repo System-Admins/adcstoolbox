@@ -30,7 +30,7 @@ function Get-UserInput
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Ask for user input' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Ask for user input';
     }
     PROCESS
     {
@@ -59,7 +59,7 @@ function Get-UserInput
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Ask for user input' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return user input.
         return $userInput;

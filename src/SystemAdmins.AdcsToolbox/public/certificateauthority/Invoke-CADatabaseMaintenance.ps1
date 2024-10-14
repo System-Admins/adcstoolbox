@@ -36,7 +36,7 @@ function Invoke-CADatabaseMaintenance
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Certificate authority database cleanup' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Certificate authority database cleanup';
 
         # Ask user to confirm.
         if ($true -eq $Confirm)
@@ -145,6 +145,6 @@ function Invoke-CADatabaseMaintenance
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Certificate authority database cleanup' -Type 'End';
+        Write-CustomProgress @customProgress;
     }
 }

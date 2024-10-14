@@ -17,7 +17,7 @@ function Test-ModulePrerequisite
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled';
     }
     PROCESS
     {
@@ -115,6 +115,6 @@ function Test-ModulePrerequisite
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if module prerequisites are fulfilled' -Type 'End';
+        Write-CustomProgress @customProgress;
     }
 }

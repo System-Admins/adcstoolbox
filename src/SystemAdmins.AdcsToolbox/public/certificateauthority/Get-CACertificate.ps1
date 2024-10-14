@@ -33,7 +33,7 @@ function Get-CACertificate
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificates/requests from certificate authority' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificates/requests from certificate authority';
 
         # Object array for the result.
         $result = New-Object System.Collections.ArrayList;
@@ -122,7 +122,7 @@ function Get-CACertificate
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificates/requests from certificate authority' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return the result.
         return $result;

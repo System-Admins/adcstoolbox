@@ -20,7 +20,7 @@ function Import-ModuleEventLogFile
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Importing JSON file with event log entries' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Importing JSON file with event log entries';
     }
     PROCESS
     {
@@ -37,7 +37,7 @@ function Import-ModuleEventLogFile
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Importing JSON file with event log entries' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return edition.
         return $eventLogTable;

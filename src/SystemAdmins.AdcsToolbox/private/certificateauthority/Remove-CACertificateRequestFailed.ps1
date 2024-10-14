@@ -32,7 +32,7 @@ function Remove-CACertificateRequestFailed
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing failed requests from CA' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing failed requests from CA';
 
         # Arguments to be used with CertUtil.exe.
         [string]$certUtilArguments = '';
@@ -113,7 +113,7 @@ function Remove-CACertificateRequestFailed
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Removing failed requests from CA' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return the removed requests.
         return $removedRequests;

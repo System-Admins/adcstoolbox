@@ -25,7 +25,7 @@ function Invoke-CertUtil
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\certutil.exe';
@@ -110,7 +110,7 @@ function Invoke-CertUtil
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running certificate utility (certutil.exe)' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return result.
         return $result;

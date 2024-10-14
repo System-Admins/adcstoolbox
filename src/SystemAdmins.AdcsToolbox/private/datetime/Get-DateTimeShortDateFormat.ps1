@@ -17,7 +17,7 @@ function Get-DateTimeShortDateFormat
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting short date format' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting short date format';
 
         # Get regional date format.
         [CultureInfo]$culture = [CultureInfo]::CurrentCulture;
@@ -36,7 +36,7 @@ function Get-DateTimeShortDateFormat
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting short date format' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return the short date format.
         return $shortDatePattern;

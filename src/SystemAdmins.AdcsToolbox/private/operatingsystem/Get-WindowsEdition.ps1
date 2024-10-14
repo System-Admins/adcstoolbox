@@ -17,7 +17,7 @@ function Get-WindowsEdition
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system edition' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system edition';
 
     }
     PROCESS
@@ -38,7 +38,7 @@ function Get-WindowsEdition
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting operating system edition' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return edition.
         return $osEdition;

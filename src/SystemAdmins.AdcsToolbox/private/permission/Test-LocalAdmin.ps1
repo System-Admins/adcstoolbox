@@ -17,7 +17,7 @@ function Test-LocalAdmin
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Testing if the current user is a local administrator' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Testing if the current user is a local administrator';
 
         # Boolean to check if the user is a local admin.
         [bool]$isLocalAdmin = $false;
@@ -46,7 +46,7 @@ function Test-LocalAdmin
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Testing if the current user is a local administrator' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return bool.
         return $isLocalAdmin;

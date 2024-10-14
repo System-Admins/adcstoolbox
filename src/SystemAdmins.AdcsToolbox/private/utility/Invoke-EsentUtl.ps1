@@ -23,7 +23,7 @@ function Invoke-EsentUtl
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running esentutl utility (esentutl.exe)' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running esentutl utility (esentutl.exe)';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\esentutl.exe';
@@ -84,7 +84,7 @@ function Invoke-EsentUtl
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Running esentutl utility (esentutl.exe)' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return result.
         return $result;

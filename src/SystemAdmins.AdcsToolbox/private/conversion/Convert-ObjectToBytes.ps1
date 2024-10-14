@@ -21,7 +21,7 @@ function Convert-ObjectToBytes
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Convert input object to byte array' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Convert input object to byte array';
 
         # Variable for the byte array result.
         [byte[]]$byteArray = $null;
@@ -54,7 +54,7 @@ function Convert-ObjectToBytes
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Convert input object to byte array' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return result.
         return $byteArray;

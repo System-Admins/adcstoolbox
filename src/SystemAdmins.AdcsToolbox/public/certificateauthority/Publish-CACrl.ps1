@@ -17,7 +17,7 @@ function Publish-CACrl
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Publish certificate authority CRL' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Publish certificate authority CRL';
 
         # CertUtil argument.
         [string]$certUtilArguments = '-crl';
@@ -36,7 +36,7 @@ function Publish-CACrl
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Publish certificate authority CRL' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return common name.
         return $result;

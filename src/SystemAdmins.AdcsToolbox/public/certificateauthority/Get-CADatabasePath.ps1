@@ -17,7 +17,7 @@ function Get-CADatabasePath
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database paths' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database paths';
 
         # Get the registry path.
         [pscustomobject]$registryPath = Get-CARegistryPath;
@@ -47,7 +47,7 @@ function Get-CADatabasePath
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc database paths' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return paths.
         return $paths;

@@ -17,7 +17,7 @@ function Get-CAService
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc service status' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc service status';
 
         # Service name.
         [string]$serviceName = 'CertSvc';
@@ -46,7 +46,7 @@ function Get-CAService
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CertSvc service status' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return status.
         return [string]$service.Status;

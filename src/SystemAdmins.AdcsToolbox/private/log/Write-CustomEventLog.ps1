@@ -49,7 +49,7 @@ function Write-CustomEventLog
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Write to event log' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Write to event log';
 
         # Find the event id in the event log table.
         $eventLog = $EventLogTable | Where-Object { $_.eventId -eq $EventId };
@@ -117,6 +117,6 @@ function Write-CustomEventLog
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Write to event log' -Type 'End';
+        Write-CustomProgress @customProgress;
     }
 }

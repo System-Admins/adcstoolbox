@@ -17,7 +17,7 @@ function Test-EsentUtl
     BEGIN
     {
         # Write to log.
-        $progressId = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'Begin';
+        $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available';
 
         # Path to the utility.
         [string]$utilityPath = 'C:\Windows\System32\esentutl.exe';
@@ -46,7 +46,7 @@ function Test-EsentUtl
     END
     {
         # Write to log.
-        Write-CustomProgress -ProgressId $progressId -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Check if esentutl.exe is available' -Type 'End';
+        Write-CustomProgress @customProgress;
 
         # Return boolean.
         return $isAvailable;
