@@ -100,18 +100,6 @@ function Get-CACertificateRevoked
                 };
             }
 
-            # Convert the expiration date to datetime.
-            [datetime]$expirationDate = [datetime]$csvData.ExpirationDate;
-
-            # Set the revocation date.
-            $csvData.ExpirationDate = $expirationDate;
-
-            # Convert the revocation date to datetime.
-            [datetime]$revocationDate = [datetime]$csvData.RevocationDate;
-
-            # Set the revocation date.
-            $csvData.RevocationDate = $revocationDate;
-
             # Add the data to the object array.
             $null = $revokedCertificates.Add($csvData);
         }

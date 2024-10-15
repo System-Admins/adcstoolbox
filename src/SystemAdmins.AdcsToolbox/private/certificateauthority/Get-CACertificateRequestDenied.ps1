@@ -74,18 +74,6 @@ function Get-CACertificateRequestDenied
             # Convert row from CSV to object.
             $csvData = $row | ConvertFrom-Csv -Header 'RequestId', 'RequesterName', 'CommonName', 'CertificateTemplate', 'ExpirationDate', 'CertificateHash', 'StatusCode', 'RequestSubmissionDate', 'RequestDisposition' -Delimiter ',';
 
-            # Convert the expiration date to datetime.
-            [datetime]$expirationDate = [datetime]$csvData.ExpirationDate;
-
-            # Set the revocation date.
-            $csvData.ExpirationDate = $expirationDate;
-
-            # Convert the submission date to datetime.
-            [datetime]$requestSubmissionDate = [datetime]$csvData.RequestSubmissionDate;
-
-            # Set the submission date.
-            $csvData.RequestSubmissionDate = $requestSubmissionDate;
-
             # Add the data to the object array.
             $null = $deniedRequests.Add($csvData);
         }

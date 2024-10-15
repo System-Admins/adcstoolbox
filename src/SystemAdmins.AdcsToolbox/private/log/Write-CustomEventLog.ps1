@@ -33,7 +33,7 @@ function Write-CustomEventLog
         # Message to write to the event log.
         [Parameter(Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
-        [string]$AdditonalMessage,
+        [string]$AdditionalMessage,
 
         # Raw data.
         [Parameter(Mandatory = $false)]
@@ -80,13 +80,13 @@ function Write-CustomEventLog
         Write-CustomLog -Message ("Writing to event log of id '{0}'" -f $eventLog.eventId) -Level Verbose;
 
         # If additional message is set.
-        if ($AdditonalMessage)
+        if ($AdditionalMessage)
         {
             # Write to log.
-            Write-CustomLog -Message ("Adding additional message '{0}'" -f $AdditonalMessage) -Level Verbose;
+            Write-CustomLog -Message ("Adding additional message '{0}'" -f $AdditionalMessage) -Level Verbose;
 
             # Add additional message.
-            $message = $eventLog.message + "`n$AdditonalMessage";
+            $message = $eventLog.message + "`n$AdditionalMessage";
         }
         else
         {
