@@ -2,9 +2,9 @@ function Get-CADatabaseSize
 {
     <#
     .SYNOPSIS
-        Return database size for CertSvc.
+        Get the certificate authority database size.
     .DESCRIPTION
-        Return object sizes.
+        Return object with the size.
     .EXAMPLE
         Get-CADatabaseSize;
     #>

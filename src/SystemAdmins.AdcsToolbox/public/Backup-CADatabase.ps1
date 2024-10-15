@@ -2,7 +2,7 @@ function Backup-CADatabase
 {
     <#
     .SYNOPSIS
-        Backup certificate authority.
+        Backup certificate authority with or without the private key.
     .DESCRIPTION
         Creates a folder and backup the Active Directory Certificate Services database to the folder.
     .PARAMETER Path
@@ -23,7 +23,7 @@ function Backup-CADatabase
         [ValidateNotNullOrEmpty()]
         [ValidateScript({ $_ -match '^[a-zA-Z]:\\' })]
         [ValidateScript({ Test-Path $_ -PathType 'Container' -IsValid })]
-        [string]$Path = ('{0}\ADCSBackup_{1}' -f $env:TEMP, (Get-Date -Format 'yyyyMMdd')),
+        [string]$Path = $script:ModuleBackupFolder,
 
         # Private key backup.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]

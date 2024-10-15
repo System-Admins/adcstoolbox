@@ -2,7 +2,7 @@ function Get-CACommonName
 {
     <#
     .SYNOPSIS
-        Get certificate authority information common name.
+        Get certificate authority common name.
     .DESCRIPTION
         Return string with certificate authority common name.
     .EXAMPLE

@@ -2,7 +2,7 @@ function Get-CAService
 {
     <#
     .SYNOPSIS
-        Get the CertSvc service.
+        Get the status of the CertSvc service.
     .DESCRIPTION
         Returns "Running" or "Stopped".
     .EXAMPLE

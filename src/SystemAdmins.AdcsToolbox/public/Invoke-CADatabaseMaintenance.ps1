@@ -62,19 +62,19 @@ function Invoke-CADatabaseMaintenance
         $null = New-Item -Path $BackupFolderPath -ItemType Directory -Force -ErrorAction Stop;
 
         # File path for original CRL configuration.
-        $originalCrlConfigFilePath = ("{0}\crlconfig.xml" -f $BackupFolderPath);
+        $originalCrlConfigFilePath = ('{0}\crlconfig.xml' -f $BackupFolderPath);
     }
     PROCESS
     {
+        # Backup the database.
+        $null = Backup-CADatabase -Path ('{0}\Database' -f $BackupFolderPath) -PrivateKey;
+
         # Get the AD CS service status.
         $serviceStatus = Get-CAService;
 
         # If the service is running.
         if ($serviceStatus -eq 'Running')
         {
-            # Backup the database.
-            $null = Backup-CADatabase -Path ("{0}\Database" -f $BackupFolderPath) -PrivateKey;
-
             # Get current CRL configuraiton.
             $originalCrlConfig = Get-CACrlConfig;
 
@@ -107,16 +107,16 @@ function Invoke-CADatabaseMaintenance
 
             # Publish the CRL.
             $null = Publish-CACrl;
-
-            # Remove expired, denied, failed and revoked certificates/requests.
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Failed;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Denied;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Expired;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Revoked;
-
-            # Stop the service.
-            Stop-CAService;
         }
+
+        # Remove expired, denied, failed and revoked certificates/requests.
+        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Failed;
+        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Denied;
+        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Expired;
+        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Revoked;
+
+        # Stop the service.
+        Stop-CAService;
 
         # Defrag the database.
         Invoke-CADatabaseDefragmentation;

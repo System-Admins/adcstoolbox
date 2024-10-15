@@ -2,7 +2,7 @@ function Get-CACertificate
 {
     <#
     .SYNOPSIS
-        Getting certificate/request from certificate authority.
+        Get certificate/request from certificate authority.
     .DESCRIPTION
         Return list of certificates/requests.
     .PARAMETER State

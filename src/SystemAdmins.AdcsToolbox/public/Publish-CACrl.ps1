@@ -9,7 +9,7 @@ function Publish-CACrl
         Publish-CACrl;
     #>
     [cmdletbinding()]
-    [OutputType([string])]
+    [OutputType([void])]
     param
     (
     )
@@ -37,8 +37,5 @@ function Publish-CACrl
     {
         # Write to log.
         Write-CustomProgress @customProgress;
-
-        # Return common name.
-        return $result;
     }
 }
