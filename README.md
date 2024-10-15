@@ -4,9 +4,25 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Pre-requisuites](#pre-requisuites)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Cmdlets](#cmdlets)
+  - [Backup-CADatabase](#Backup-CADatabase)
+  - [Get-CACertificate](#Get-CACertificate)
+  - [Get-CACommonName](#Get-CACommonName)
+  - [Get-CACrlConfig](#Get-CACrlConfig)
+  - [Get-CADatabasePath](#Get-CADatabasePath)
+  - [Get-CADatabaseSize](#Get-CADatabaseSize)
+  - [Get-CAService](#Get-CAService)
+  - [Invoke-CADatabaseMaintenance](#Invoke-CADatabaseMaintenance)
+  - [Publish-CACrl](#Publish-CACrl)
+  - [Remove-CACertificate](#Remove-CACertificate)
+  - [Set-CACrlConfig](#Set-CACrlConfig)
+  - [Start-CAService](#Start-CAService)
+  - [Stop-CAService](#Stop-CAService)
+- [FAQ](#faq)
+- [Contributing](#contributing)
 
 
 
@@ -23,12 +39,15 @@ This module is only able to run on a Windows Server with the AD CS role installe
 ## Installation
 ### Online mode
 
-If the AD CS server have access to the internet, it's possible to install the module, using the following command:
+If the AD CS server have access to the internet.
 
-```powershell
-Install-Module -Name SystemAdmins.AdcsToolbox -Scope CurrentUser;
-Import-Module -Name SystemAdmins.AdcsToolbox;
-```
+1. Open a PowerShell session
+
+2. Install and import the module
+
+   ```powershell
+   Install-Module -Name SystemAdmins.AdcsToolbox -Scope CurrentUser;
+   ```
 
 
 
@@ -41,26 +60,22 @@ Most AD CS servers don't have access to the internet, therefore it's required to
 2. Download the PowerShell module
 
    ```powershell
-   Save-Module -Name SystemAdmins.AdcsToolbox -Path ([Environment]::GetFolderPath("Desktop")) -Force -AcceptLicense;
+   Save-Module -Name SystemAdmins.AdcsToolbox -Path ([Environment]::GetFolderPath("Desktop")) -Force;
    ```
 
 3. Copy the folder "SystemAdmins.AdcsToolbox" from your desktop on to the AD CS server to the following path "C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules".
-
-4. Now import the the module.
-
-   ```powershell
-   Import-Module -Name SystemAdmins.AdcsToolbox;
-   ```
 
 
 
 ## Usage
 
-To use the module, you need to import it first. Run the following command:
+1. Open a elevated PowerShell session (run as administrator) on the AD CS server.
 
-```powershell
-Import-Module SystemAdmins.AdcsToolbox;
-```
+2. Import the module
+
+   ```powershell
+   Import-Module SystemAdmins.AdcsToolbox;
+   ```
 
 
 
