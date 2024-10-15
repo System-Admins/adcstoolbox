@@ -108,7 +108,7 @@ function Write-CustomEventLog
         if ($RawData)
         {
             # Add raw data.
-            $null = $splat.Add('RawData', (Convert-ObjectToBytes -InputObject $RawData));
+            $null = $splat.Add('RawData', (Convert-ObjectToByte -InputObject $RawData));
         }
 
         # Write to event log.

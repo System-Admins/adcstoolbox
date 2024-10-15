@@ -9,7 +9,7 @@ function Test-CAInstalled
         Test-CAInstalled;
     #>
     [cmdletbinding()]
-    [OutputType([pscustomobject])]
+    [OutputType([bool])]
     param
     (
     )

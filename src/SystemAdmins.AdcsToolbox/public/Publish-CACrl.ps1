@@ -28,7 +28,7 @@ function Publish-CACrl
         Write-CustomLog -Message "Publishing CRL" -Level Verbose;
 
         # Invoke certutil.
-        $result = Invoke-CertUtil -Arguments $certUtilArguments;
+        $null = Invoke-CertUtil -Arguments $certUtilArguments;
 
         # Write to event log.
         Write-CustomEventLog -EventId 61;

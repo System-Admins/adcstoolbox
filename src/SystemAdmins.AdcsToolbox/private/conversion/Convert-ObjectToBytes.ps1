@@ -1,4 +1,4 @@
-function Convert-ObjectToBytes
+function Convert-ObjectToByte
 {
     <#
     .SYNOPSIS
@@ -6,7 +6,7 @@ function Convert-ObjectToBytes
     .DESCRIPTION
         Return byte array.
     .EXAMPLE
-        Convert-ObjectToBytes;
+        Convert-ObjectToByte;
     #>
     [cmdletbinding()]
     [OutputType([byte[]])]

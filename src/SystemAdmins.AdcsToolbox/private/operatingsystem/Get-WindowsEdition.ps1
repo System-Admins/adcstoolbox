@@ -23,7 +23,7 @@ function Get-WindowsEdition
     PROCESS
     {
         # Get operating system from WMI.
-        $wmiObject = Get-WmiObject -Class Win32_OperatingSystem;
+        $wmiObject = Get-CimInstance -ClassName Win32_OperatingSystem;
 
         # Object to return.
         [pscustomobject]$osEdition = [pscustomobject]@{

@@ -20,7 +20,7 @@ function Get-DiskSpace
         $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Get disk size';
 
         # Get disk info.
-        $disks = Get-WmiObject -Class Win32_LogicalDisk;
+        $disks = Get-CimInstance -ClassName Win32_LogicalDisk;
 
         # Object array to return.
         [System.Collections.ArrayList]$result = @();
