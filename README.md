@@ -11,7 +11,12 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
 
 
 ## Introduction
-SystemAdmins.AdcsToolbox is a PowerShell module designed to simplify the management and automation of Active Directory Certificate Services (ADCS). This module provides a set of cmdlets to perform common tasks related to ADCS.
+SystemAdmins.AdcsToolbox is a PowerShell module designed to simplify the management and automation of Active Directory Certificate Services (ADCS). This module provides a set of cmdlets to perform common tasks related to ADCS such as database maintenance.
+
+
+
+## Pre-requisuites
+This module is only able to run on a Windows Server with the AD CS role installed.
 
 
 
@@ -177,7 +182,7 @@ Get-CACrlConfig
 
 PSCustomObject
 
- 
+
 
 ### Get-CADatabasePath
 
@@ -203,7 +208,7 @@ Get-CADatabasePath
 
 PSCustomObject
 
- 
+
 
 ### Get-CADatabaseSize
 
@@ -437,6 +442,18 @@ Stop-CAService
 ### Output
 
 Void
+
+
+
+## FAQ
+- **Why was this PowerShell module created?**
+
+  During a project at a customer we needed to automate the AD CS database maintenance job. The customer did not want to use the PSPKI module due to compiled DLL files.
+
+- **I'm missing vital cmdlet for my work**
+
+  Please create an issue on the GitHub repository
+
 
 
 
