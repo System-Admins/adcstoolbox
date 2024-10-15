@@ -26,8 +26,8 @@ This module is only able to run on a Windows Server with the AD CS role installe
 If the AD CS server have access to the internet, it's possible to install the module, using the following command:
 
 ```powershell
-Install-Module -Name SystemAdmins.AdcsToolbox -Scope CurrentUser
-Import-Module -Name SystemAdmins.AdcsToolbox
+Install-Module -Name SystemAdmins.AdcsToolbox -Scope CurrentUser;
+Import-Module -Name SystemAdmins.AdcsToolbox;
 ```
 
 
@@ -44,12 +44,12 @@ Most AD CS servers don't have access to the internet, therefore it's required to
    Save-Module -Name SystemAdmins.AdcsToolbox -Path ([Environment]::GetFolderPath("Desktop")) -Force -AcceptLicense;
    ```
 
-3. Copy the folder "SystemAdmins.AdcsToolbox" from your desktop on to the AD CS server in the following path "".
+3. Copy the folder "SystemAdmins.AdcsToolbox" from your desktop on to the AD CS server to the following path "C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules".
 
 4. Now import the the module.
 
    ```powershell
-   Import-Module -Name SystemAdmins.AdcsToolbox
+   Import-Module -Name SystemAdmins.AdcsToolbox;
    ```
 
 
@@ -59,7 +59,7 @@ Most AD CS servers don't have access to the internet, therefore it's required to
 To use the module, you need to import it first. Run the following command:
 
 ```powershell
-Import-Module SystemAdmins.AdcsToolbox
+Import-Module SystemAdmins.AdcsToolbox;
 ```
 
 
