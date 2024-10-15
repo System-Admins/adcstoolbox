@@ -74,12 +74,6 @@ function Get-CACertificateExpired
             # Convert row from CSV to object.
             $csvData = $row | ConvertFrom-Csv -Header 'RequestId', 'RequesterName', 'CommonName', 'CertificateTemplate', 'ExpirationDate', 'CertificateHash', 'StatusCode' -Delimiter ',';
 
-            # Convert the expiration date to datetime.
-            [datetime]$expirationDate = [datetime]$csvData.ExpirationDate;
-
-            # Set the revocation date.
-            $csvData.ExpirationDate = $expirationDate;
-
             # Add the data to the object array.
             $null = $expiredCertificates.Add($csvData);
         }

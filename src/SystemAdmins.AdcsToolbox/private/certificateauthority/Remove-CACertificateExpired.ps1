@@ -26,12 +26,7 @@ function Remove-CACertificateExpired
         # Limit the number of certificates to remove.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
         [ValidateNotNullOrEmpty()]
-        [int]$Limit = 150000,
-
-        # Path for exporting the removed certificates.
-        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [ValidateNotNullOrEmpty()]
-        [string]$ExportPath = 'C:\Temp\RemovedCertificates.csv'
+        [int]$Limit = 150000
     )
 
     BEGIN
