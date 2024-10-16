@@ -163,25 +163,25 @@ function Remove-CACertificate
                     'Revoked'
                     {
                         # Write to event log.
-                        Write-CustomEventLog -EventId 122 -AdditionalMessage ($certificate);
+                        Write-CustomEventLog -EventId 122 -AdditionalMessage (Out-String -InputObject $certificate);
                     }
                     # If the state is expired.
                     'Expired'
                     {
                         # Write to event log.
-                        Write-CustomEventLog -EventId 121 -AdditionalMessage ($certificate);
+                        Write-CustomEventLog -EventId 121 -AdditionalMessage (Out-String -InputObject $certificate);
                     }
                     # If the state is denied.
                     'Denied'
                     {
                         # Write to event log.
-                        Write-CustomEventLog -EventId 123 -AdditionalMessage ($certificate);
+                        Write-CustomEventLog -EventId 123 -AdditionalMessage (Out-String -InputObject $certificate);
                     }
                     # If the state is failed.
                     'Failed'
                     {
                         # Write to event log.
-                        Write-CustomEventLog -EventId 124 -AdditionalMessage ($certificate);
+                        Write-CustomEventLog -EventId 124 -AdditionalMessage (Out-String -InputObject $certificate);
                     }
                 }
 
@@ -192,15 +192,12 @@ function Remove-CACertificate
             catch
             {
                 # Write to event log.
-                Write-CustomEventLog -EventId 125 -AdditionalMessage ($certificate);
+                Write-CustomEventLog -EventId 125 -AdditionalMessage (Out-String -InputObject $certificate);
 
                 # Throw exception.
                 throw ('Failed to remove certificate/request with id {0}. {1}' -f $certificate.RequestID, $_.Exception.Message);
             }
         }
-
-        # Write to event log.
-        Write-CustomEventLog -EventId 63;
     }
     END
     {

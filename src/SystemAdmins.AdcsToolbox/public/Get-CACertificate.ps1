@@ -64,6 +64,20 @@ function Get-CACertificate
             'Revocation Reason',
             'Revocation Date'
         );
+
+        # Disposition hashtable.
+        $dispositionTable = @{
+            8  = 'Request is being processed';
+            9  = 'Request is taken under submission';
+            12 = 'Certificate is an archived foreign certificate';
+            15 = 'Certificate is a CA certificate';
+            16 = 'Parent CA certificates of the CA certificate';
+            17 = 'Certificate is a key recovery agent certificate';
+            20 = 'Certificate was issued';
+            21 = 'Certificate is revoked';
+            30 = 'Certificate request failed';
+            31 = 'Certificate request is denied';
+        };
     }
     PROCESS
     {
@@ -122,7 +136,7 @@ function Get-CACertificate
         if ($State -eq 'Revoked')
         {
             # Write to log.
-            Write-CustomLog -Message ("Set restriction to revoked certificates") -Level Verbose;
+            Write-CustomLog -Message ('Set restriction to revoked certificates') -Level Verbose;
 
             # Get the column index.
             $columnIndex = $caView.GetColumnIndex($false, 'Disposition');
@@ -147,7 +161,7 @@ function Get-CACertificate
         elseif ($State -eq 'Expired')
         {
             # Write to log.
-            Write-CustomLog -Message ("Set restriction to expired certificates") -Level Verbose;
+            Write-CustomLog -Message ('Set restriction to expired certificates') -Level Verbose;
             Write-CustomLog -Message ("Set restriction to lower than date '{0}'" -f $Date) -Level Verbose;
 
             # Get the column index.
@@ -160,7 +174,7 @@ function Get-CACertificate
         elseif ($State -eq 'Denied')
         {
             # Write to log.
-            Write-CustomLog -Message ("Set restriction to denied certificates") -Level Verbose;
+            Write-CustomLog -Message ('Set restriction to denied certificates') -Level Verbose;
 
             # Get the column index.
             $columnIndex = $caView.GetColumnIndex($false, 'Request Disposition');
@@ -185,7 +199,7 @@ function Get-CACertificate
         elseif ($State -eq 'Failed')
         {
             # Write to log.
-            Write-CustomLog -Message ("Set restriction to failed certificates") -Level Verbose;
+            Write-CustomLog -Message ('Set restriction to failed certificates') -Level Verbose;
 
             # Get the column index.
             $columnIndex = $caView.GetColumnIndex($false, 'Request Disposition');
@@ -252,8 +266,11 @@ function Get-CACertificate
                 Add-Member -InputObject $databaseItem -MemberType NoteProperty $($databaseColumn.GetName()) -Value $($databaseColumn.GetValue(1)) -Force;
             }
 
+            # Get disposition name.
+            $dispositionName = (($dispositionTable.GetEnumerator()) | Where-Object {$_.Name -eq $databaseItem.'Request.Disposition'}).Value;
+
             # Add state to the object.
-            Add-Member -InputObject $databaseItem -MemberType NoteProperty -Name 'State' -Value $State -Force;
+            Add-Member -InputObject $databaseItem -MemberType NoteProperty -Name 'DispositionName' -Value $dispositionName -Force;
 
             # Add the object to the result.
             $null = $result.Add($databaseItem);

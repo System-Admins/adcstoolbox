@@ -106,24 +106,23 @@ function Invoke-CADatabaseMaintenance
             $null = Publish-CACrl;
         }
 
+        # Splatting for Remove-CACertificate.
+        $removeCertificateSplat = @{
+            Confirm = $false;
+        };
+
         # If date is set.
         if ($true -eq $PSBoundParameters.ContainsKey('Date'))
         {
-            # Remove expired, denied, failed and revoked certificates/requests.
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Failed;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Denied;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Expired;
-            $null = Remove-CACertificate -Date $CertificateRemovalDate -State Revoked;
+            # Add to the splat.
+            $removeCertificateSplat.Add('Date', $CertificateRemovalDate);
         }
-        # Else if date is not set.
-        else
-        {
-            # Remove expired, denied, failed and revoked certificates/requests.
-            $null = Remove-CACertificate -State Failed;
-            $null = Remove-CACertificate -State Denied;
-            $null = Remove-CACertificate -State Expired;
-            $null = Remove-CACertificate -State Revoked;
-        }
+
+        # Remove expired, denied, failed and revoked certificates/requests.
+        $null = Remove-CACertificate -State Failed @removeCertificateSplat;
+        $null = Remove-CACertificate -State Denied @removeCertificateSplat;
+        $null = Remove-CACertificate -State Expired @removeCertificateSplat;
+        $null = Remove-CACertificate -State Revoked @removeCertificateSplat;
 
         # Stop the service.
         Stop-CAService;

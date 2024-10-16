@@ -55,13 +55,13 @@
     },
     {
         "eventId": 9,
-        "entryType": "Error",
+        "entryType": "Information",
         "logName": "Application",
         "message": "Defragmentation of the AD CS database successed"
     },
     {
         "eventId": 10,
-        "entryType": "Error",
+        "entryType": "Information",
         "logName": "Application",
         "message": "Defragmentation of the AD CS database started"
     },
