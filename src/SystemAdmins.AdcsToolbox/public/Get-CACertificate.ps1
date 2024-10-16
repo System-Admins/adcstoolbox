@@ -105,7 +105,7 @@ function Get-CACertificate
             throw ('Failed to connect to certificate authority. {0}' -f $_.Exception.Message);
         }
 
-        # SeekOperator:
+        # SetRestriction - SeekOperator:
         #CVR_SEEK_NONE = 0
         #CVR_SEEK_EQ = 1
         #CVR_SEEK_LT = 2
@@ -113,7 +113,7 @@ function Get-CACertificate
         #CVR_SEEK_GE = 8
         #CVR_SEEK_GT = 10
 
-        # SortOrder:
+        # SetRestriction- SortOrder:
         #CVR_SORT_NONE = 0
         #CVR_SORT_ASCEND = 1
         #CVR_SORT_DESCEND = 2
@@ -251,6 +251,9 @@ function Get-CACertificate
                 # Add the column to the object.
                 Add-Member -InputObject $databaseItem -MemberType NoteProperty $($databaseColumn.GetName()) -Value $($databaseColumn.GetValue(1)) -Force;
             }
+
+            # Add state to the object.
+            Add-Member -InputObject $databaseItem -MemberType NoteProperty -Name 'State' -Value $State -Force;
 
             # Add the object to the result.
             $null = $result.Add($databaseItem);

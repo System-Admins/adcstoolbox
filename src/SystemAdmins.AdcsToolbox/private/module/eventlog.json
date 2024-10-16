@@ -126,6 +126,12 @@
         "message": "The AD CS revocation configuration list was updated"
     },
     {
+        "eventId": 63,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "AD CS revocation configuration failed to publish"
+    },
+    {
         "eventId": 91,
         "entryType": "Information",
         "logName": "Application",
