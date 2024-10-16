@@ -189,7 +189,7 @@ function Set-CACrlConfig
         }
 
         # Write to event log.
-        Write-CustomEventLog -EventId 62 -AdditionalMessage ($PSBoundParameters);
+        Write-CustomEventLog -EventId 62 -AdditionalMessage (Out-String -InputObject $PSBoundParameters);
     }
     END
     {

@@ -55,13 +55,13 @@
     },
     {
         "eventId": 9,
-        "entryType": "Error",
+        "entryType": "Information",
         "logName": "Application",
         "message": "Defragmentation of the AD CS database successed"
     },
     {
         "eventId": 10,
-        "entryType": "Error",
+        "entryType": "Information",
         "logName": "Application",
         "message": "Defragmentation of the AD CS database started"
     },
@@ -124,6 +124,12 @@
         "entryType": "Information",
         "logName": "Application",
         "message": "The AD CS revocation configuration list was updated"
+    },
+    {
+        "eventId": 63,
+        "entryType": "Error",
+        "logName": "Application",
+        "message": "AD CS revocation configuration failed to publish"
     },
     {
         "eventId": 91,

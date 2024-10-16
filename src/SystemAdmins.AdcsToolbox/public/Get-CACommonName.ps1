@@ -29,6 +29,9 @@ function Get-CACommonName
     {
         # Get the common name.
         $commonName = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CommonName');
+
+        # Write to log.
+        Write-CustomLog -Message ("CA CommonName is '{0}'" -f $commonName) -Level Verbose;
     }
     END
     {

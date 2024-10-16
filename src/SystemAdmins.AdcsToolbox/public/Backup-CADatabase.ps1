@@ -128,7 +128,7 @@ function Backup-CADatabase
                 Write-CustomEventLog -EventId 3;
 
                 # Backup without private key.
-                Backup-CA -Path $Path;
+                $null = Backup-CADatabase -Path $Path;
             }
         }
         # Else backup without private key.

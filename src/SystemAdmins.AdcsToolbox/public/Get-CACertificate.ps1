@@ -35,89 +35,255 @@ function Get-CACertificate
         # Write to log.
         $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting certificates/requests from certificate authority';
 
+        # Get the common name of the certificate authority.
+        $caCommonName = Get-CACommonName;
+
+        # Get hostname of the certificate authority.
+        $hostname = $env:COMPUTERNAME
+
+        # Construct CA config string.
+        $caConfigString = ('{0}\{1}' -f $hostname, $caCommonName);
+
         # Object array for the result.
         $result = New-Object System.Collections.ArrayList;
+
+        # Properties to fetch.
+        $properties = @(
+            'RequestId',
+            'RequesterName',
+            'Binary Certificate',
+            'CommonName',
+            'CertificateTemplate',
+            'Certificate Effective Date',
+            'Certificate Expiration Date',
+            'CertificateHash',
+            'SerialNumber',
+            'StatusCode',
+            'Request Submission Date',
+            'Request Disposition',
+            'Revocation Reason',
+            'Revocation Date'
+        );
+
+        # Disposition hashtable.
+        $dispositionTable = @{
+            8  = 'Request is being processed';
+            9  = 'Request is taken under submission';
+            12 = 'Certificate is an archived foreign certificate';
+            15 = 'Certificate is a CA certificate';
+            16 = 'Parent CA certificates of the CA certificate';
+            17 = 'Certificate is a key recovery agent certificate';
+            20 = 'Certificate was issued';
+            21 = 'Certificate is revoked';
+            30 = 'Certificate request failed';
+            31 = 'Certificate request is denied';
+        };
     }
     PROCESS
     {
-        # If date is set.
-        if ($PSBoundParameters.ContainsKey('Date'))
+        # Try to create a new instance of ICertView2 interface.
+        try
         {
-            # If state is revoked.
-            if ($State -eq 'Revoked')
+            # Write to log.
+            Write-CustomLog -Message ('Trying to instantiate ICertView2 interface') -Level Verbose;
+
+            # Instantiate ICertView2 interface.
+            $caView = New-Object -ComObject CertificateAuthority.View;
+
+            # Write to log.
+            Write-CustomLog -Message ('Successfully instantiate ICertView2 interface') -Level Verbose;
+        }
+        # Something went wrong.
+        catch
+        {
+            # Throw exception.
+            throw ('Failed to instantiate ICertView2 interface. {0}' -f $_.Exception.Message);
+        }
+
+        # Try to connect to the certificate authority.
+        try
+        {
+            # Write to log.
+            Write-CustomLog -Message ("Trying to connect to certificate authority '{0}'" -f $caConfigString) -Level Verbose;
+
+            # Connect to the certificate authority.
+            $caView.OpenConnection($caConfigString);
+
+            # Write to log.
+            Write-CustomLog -Message ('Successfully connected to certificate authority') -Level Verbose;
+        }
+        # Something went wrong.
+        catch
+        {
+            # Throw exception.
+            throw ('Failed to connect to certificate authority. {0}' -f $_.Exception.Message);
+        }
+
+        # SetRestriction - SeekOperator:
+        #CVR_SEEK_NONE = 0
+        #CVR_SEEK_EQ = 1
+        #CVR_SEEK_LT = 2
+        #CVR_SEEK_LE = 4
+        #CVR_SEEK_GE = 8
+        #CVR_SEEK_GT = 10
+
+        # SetRestriction- SortOrder:
+        #CVR_SORT_NONE = 0
+        #CVR_SORT_ASCEND = 1
+        #CVR_SORT_DESCEND = 2
+
+        # If the state is 'Revoked'.
+        if ($State -eq 'Revoked')
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Set restriction to revoked certificates') -Level Verbose;
+
+            # Get the column index.
+            $columnIndex = $caView.GetColumnIndex($false, 'Disposition');
+
+            # Set the restriction (index, seekoperator, sortorder, value).
+            $null = $caView.SetRestriction($columnIndex, 1, 0, 21);
+
+            # If the date is set.
+            if ($PSBoundParameters.ContainsKey('Date'))
             {
-                # Get revoked certificates.
-                $result = Get-CACertificateRevoked -Date $Date;
-            }
-            # If state is expired.
-            elseif ($State -eq 'Expired')
-            {
-                # Get expired certificates.
-                $result = Get-CACertificateExpired -Date $Date;
-            }
-            # If state is denied.
-            elseif ($State -eq 'Denied')
-            {
-                # Get denied requests.
-                $result = Get-CACertificateRequestDenied -Date $Date;
-            }
-            # If state is failed.
-            elseif ($State -eq 'Failed')
-            {
-                # Get failed requests.
-                $result = Get-CACertificateRequestFailed -Date $Date;
-            }
-            # Else use default.
-            else
-            {
-                # Get certificates.
-                $result += [PSCustomObject]@{
-                    Revoked = Get-CACertificateRevoked -Date $Date;
-                    Expired = Get-CACertificateExpired -Date $Date;
-                    Denied = Get-CACertificateRequestDenied -Date $Date;
-                    Failed = Get-CACertificateRequestFailed -Date $Date;
-                };
+                # Write to log.
+                Write-CustomLog -Message ("Set restriction to lower than date '{0}'" -f $Date) -Level Verbose;
+
+                # Get the column index.
+                $columnIndex = $caView.GetColumnIndex($false, 'Revocation Date');
+
+                # Set the restriction (index, seekoperator, sortorder, value).
+                $null = $caView.SetRestriction($columnIndex, 2, 0, $Date);
             }
         }
-        # Else use default.
-        else
+        # Else if the state is 'Expired'.
+        elseif ($State -eq 'Expired')
         {
-            # If state is revoked.
-            if ($State -eq 'Revoked')
+            # Write to log.
+            Write-CustomLog -Message ('Set restriction to expired certificates') -Level Verbose;
+            Write-CustomLog -Message ("Set restriction to lower than date '{0}'" -f $Date) -Level Verbose;
+
+            # Get the column index.
+            $columnIndex = $caView.GetColumnIndex($false, 'NotAfter');
+
+            # Set the restriction (index, seekoperator, sortorder, value).
+            $null = $caView.SetRestriction($columnIndex, 2, 0, $Date);
+        }
+        # Else if the state is 'Denied'.
+        elseif ($State -eq 'Denied')
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Set restriction to denied certificates') -Level Verbose;
+
+            # Get the column index.
+            $columnIndex = $caView.GetColumnIndex($false, 'Request Disposition');
+
+            # Set the restriction (index, seekoperator, sortorder, value).
+            $null = $caView.SetRestriction($columnIndex, 1, 0, 31);
+
+            # If the date is set.
+            if ($PSBoundParameters.ContainsKey('Date'))
             {
-                # Get revoked certificates.
-                $result = Get-CACertificateRevoked;
-            }
-            # If state is expired.
-            elseif ($State -eq 'Expired')
-            {
-                # Get expired certificates.
-                $result = Get-CACertificateExpired;
-            }
-            # If state is denied.
-            elseif ($State -eq 'Denied')
-            {
-                # Get denied requests.
-                $result = Get-CACertificateRequestDenied;
-            }
-            # If state is failed.
-            elseif ($State -eq 'Failed')
-            {
-                # Get failed requests.
-                $result = Get-CACertificateRequestFailed;
-            }
-            # Else use default.
-            else
-            {
-                # Get certificates.
-                $result += [PSCustomObject]@{
-                    Revoked = Get-CACertificateRevoked;
-                    Expired = Get-CACertificateExpired;
-                    Denied = Get-CACertificateRequestDenied;
-                    Failed = Get-CACertificateRequestFailed;
-                };
+                # Write to log.
+                Write-CustomLog -Message ("Set restriction to lower than date '{0}'" -f $Date) -Level Verbose;
+
+                # Get the column index.
+                $columnIndex = $caView.GetColumnIndex($false, 'Request Submission Date');
+
+                # Set the restriction (index, seekoperator, sortorder, value).
+                $null = $caView.SetRestriction($columnIndex, 2, 0, $Date);
             }
         }
+        # Else if the state is 'Failed'.
+        elseif ($State -eq 'Failed')
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Set restriction to failed certificates') -Level Verbose;
+
+            # Get the column index.
+            $columnIndex = $caView.GetColumnIndex($false, 'Request Disposition');
+
+            # Set the restriction (index, seekoperator, sortorder, value).
+            $null = $caView.SetRestriction($columnIndex, 1, 0, 30);
+
+            # If the date is set.
+            if ($PSBoundParameters.ContainsKey('Date'))
+            {
+                # Write to log.
+                Write-CustomLog -Message ("Set restriction to lower than date '{0}'" -f $Date) -Level Verbose;
+
+                # Get the column index.
+                $columnIndex = $caView.GetColumnIndex($false, 'Request Submission Date');
+
+                # Set the restriction (index, seekoperator, sortorder, value).
+                $null = $caView.SetRestriction($columnIndex, 2, 0, $Date);
+            }
+        }
+
+        # Set the result column count.
+        $null = $caView.SetResultColumnCount($properties.Count);
+
+        # Foreach property
+        foreach ($property in $properties)
+        {
+            # Set the result column.
+            $null = $CAView.SetResultColumn($caView.GetColumnIndex($false, $property));
+        }
+
+        # Try to open the database.
+        try
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Trying to open the AD CS database') -Level Verbose;
+
+            # Open the database.
+            $databaseRow = $caView.OpenView();
+
+            # Write to log.
+            Write-CustomLog -Message ('Successfully opened the AD CS database') -Level Verbose;
+        }
+        # Something went wrong.
+        catch
+        {
+            # Throw exception.
+            throw ('Failed to open the AD CS database. {0}' -f $_.Exception.Message);
+        }
+
+        # As long as there are more table rows in the database.
+        while ($databaseRow.Next() -ne -1)
+        {
+            # Create a new object.
+            $databaseItem = New-Object -TypeName PSObject;
+
+            # Get all row columns.
+            $databaseColumn = $databaseRow.EnumCertViewColumn();
+
+            # As long as there are more columns in the row.
+            while ($databaseColumn.Next() -ne -1)
+            {
+                # Add the column to the object.
+                Add-Member -InputObject $databaseItem -MemberType NoteProperty $($databaseColumn.GetName()) -Value $($databaseColumn.GetValue(1)) -Force;
+            }
+
+            # Get disposition name.
+            $dispositionName = (($dispositionTable.GetEnumerator()) | Where-Object {$_.Name -eq $databaseItem.'Request.Disposition'}).Value;
+
+            # Add state to the object.
+            Add-Member -InputObject $databaseItem -MemberType NoteProperty -Name 'DispositionName' -Value $dispositionName -Force;
+
+            # Add the object to the result.
+            $null = $result.Add($databaseItem);
+
+            # Reset the column data
+            $databaseColumn.Reset();
+        }
+
+        # Reset the row data.
+        $databaseRow.Reset();
+
+        # Write to log.
+        Write-CustomLog -Message ('Found {0} certificate(s)/request(s)' -f $result.Count) -Level Verbose;
     }
     END
     {

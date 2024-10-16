@@ -55,9 +55,6 @@ function Invoke-CADatabaseMaintenance
             }
         }
 
-        # Write to event log.
-        Write-CustomEventLog
-
         # Create the backup folder.
         $null = New-Item -Path $BackupFolderPath -ItemType Directory -Force -ErrorAction Stop;
 
@@ -109,11 +106,23 @@ function Invoke-CADatabaseMaintenance
             $null = Publish-CACrl;
         }
 
+        # Splatting for Remove-CACertificate.
+        $removeCertificateSplat = @{
+            Confirm = $false;
+        };
+
+        # If date is set.
+        if ($true -eq $PSBoundParameters.ContainsKey('Date'))
+        {
+            # Add to the splat.
+            $removeCertificateSplat.Add('Date', $CertificateRemovalDate);
+        }
+
         # Remove expired, denied, failed and revoked certificates/requests.
-        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Failed;
-        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Denied;
-        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Expired;
-        $null = Remove-CACertificate -Date $CertificateRemovalDate -State Revoked;
+        $null = Remove-CACertificate -State Failed @removeCertificateSplat;
+        $null = Remove-CACertificate -State Denied @removeCertificateSplat;
+        $null = Remove-CACertificate -State Expired @removeCertificateSplat;
+        $null = Remove-CACertificate -State Revoked @removeCertificateSplat;
 
         # Stop the service.
         Stop-CAService;

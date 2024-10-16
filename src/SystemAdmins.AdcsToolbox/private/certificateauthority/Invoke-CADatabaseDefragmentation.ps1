@@ -66,13 +66,13 @@ function Invoke-CADatabaseDefragmentation
             Write-CustomLog -Message ('Successfully defragmented the ADCS database') -Level Verbose;
 
             # Write to event log.
-            Write-CustomEventLog -EventId 8;
+            Write-CustomEventLog -EventId 9;
         }
         # Something went wrong.
         catch
         {
             # Write to event log.
-            Write-CustomEventLog -EventId 9;
+            Write-CustomEventLog -EventId 8;
 
             # Throw execption.
             throw ('Failed to defragment the ADCS database. {0}' -f $_.Exception.Message);

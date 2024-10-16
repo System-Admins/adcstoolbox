@@ -13,7 +13,7 @@ function Invoke-CertUtil
         Invoke-CertUtil -Arguments '-pulse';
     #>
     [cmdletbinding()]
-    [OutputType([bool])]
+    [OutputType([string])]
     param
     (
         # Arguments to pass to the certutil utility.
@@ -88,7 +88,7 @@ function Invoke-CertUtil
                 Write-CustomLog -Message ('Succesfully executed certutil.exe, but code exit code 939523027 (which mean throttled). Will retry operation' -f $Arguments) -Level Verbose;
 
                 # Retry the process.
-                $null = Invoke-CertUtility -Arguments $Arguments;
+                $null = Invoke-CertUtil -Arguments $Arguments;
             }
             # Else exit code is not 0 (mayby an error).
             else
