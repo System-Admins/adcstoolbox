@@ -5,6 +5,8 @@ function Remove-CACertificate
         Remove certificate/request from certificate authority.
     .DESCRIPTION
         Return list of removed certificates/requests.
+    .PARAMETER Id
+        Request id to remove.
     .PARAMETER State
         State of certificate/request (revoked, expired, denied, failed).
     .PARAMETER Date
@@ -58,85 +60,110 @@ function Remove-CACertificate
                 exit 1;
             }
         }
-    }
-    PROCESS
-    {
+
+        # Get the common name of the certificate authority.
+        $caCommonName = Get-CACommonName;
+
+        # Get hostname of the certificate authority.
+        $hostname = $env:COMPUTERNAME
+
+        # Construct CA config string.
+        $caConfigString = ('{0}\{1}' -f $hostname, $caCommonName);
+
+        # Certificates to remove.
+        $certificatesToRemove = @();
+
+        # Splatting.
+        $getCertificateSplat = @{};
+
         # If date is set.
         if ($PSBoundParameters.ContainsKey('Date'))
         {
-            # If state is revoked.
-            if ($State -eq 'Revoked')
-            {
-                # Get revoked certificates.
-                $result = Remove-CACertificateRevoked -Date $Date;
-            }
-            # If state is expired.
-            elseif ($State -eq 'Expired')
-            {
-                # Get expired certificates.
-                $result = Remove-CACertificateExpired -Date $Date;
-            }
-            # If state is denied.
-            elseif ($State -eq 'Denied')
-            {
-                # Get denied requests.
-                $result = Remove-CACertificateRequestDenied -Date $Date;
-            }
-            # If state is failed.
-            elseif ($State -eq 'Failed')
-            {
-                # Get failed requests.
-                $result = Remove-CACertificateRequestFailed -Date $Date;
-            }
-            # Else use default.
-            else
-            {
-                # Get certificates.
-                $result += [PSCustomObject]@{
-                    Revoked = Remove-CACertificateRevoked -Date $Date;
-                    Expired = Remove-CACertificateExpired -Date $Date;
-                    Denied  = Remove-CACertificateRequestDenied -Date $Date;
-                    Failed  = Remove-CACertificateRequestFailed -Date $Date;
-                };
-            }
+            # Add to the splat.
+            $getCertificateSplat.Add('Date', $Date);
         }
-        # Else use default.
-        else
+
+        # Result.
+        $result = New-Object System.Collections.ArrayList;
+    }
+    PROCESS
+    {
+        # If state is not set.
+        if (-not $PSBoundParameters.ContainsKey('State'))
         {
-            # If state is revoked.
-            if ($State -eq 'Revoked')
+            # Add all states.
+            $certificatesToRemove += Get-CACertificate -State 'Revoked' @getCertificateSplat;
+            $certificatesToRemove += Get-CACertificate -State 'Expired' @getCertificateSplat;
+            $certificatesToRemove += Get-CACertificate -State 'Denied' @getCertificateSplat;
+            $certificatesToRemove += Get-CACertificate -State 'Failed' @getCertificateSplat;
+        }
+        # If state is revoked.
+        elseif ($State -eq 'Revoked')
+        {
+            # Get revoked certificates.
+            $certificatesToRemove = Get-CACertificate -State 'Revoked' @getCertificateSplat;
+        }
+        # If state is expired.
+        elseif ($State -eq 'Expired')
+        {
+            # Get expired certificates.
+            $certificatesToRemove = Get-CACertificate -State 'Expired' @getCertificateSplat;
+        }
+        # If state is denied.
+        elseif ($State -eq 'Denied')
+        {
+            # Get denied requests.
+            $certificatesToRemove = Get-CACertificate -State 'Denied' @getCertificateSplat;
+        }
+        # If state is failed.
+        elseif ($State -eq 'Failed')
+        {
+            # Get failed requests.
+            $certificatesToRemove = Get-CACertificate -State 'Failed' @getCertificateSplat;
+        }
+
+        # Try to create a new instance of ICertAdmin2 interface.
+        try
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Trying to instantiate ICertAdmin2 interface') -Level Verbose;
+
+            # Instantiate ICertAdmin2 interface.
+            $caAdmin = New-Object -ComObject CertificateAuthority.Admin;
+
+            # Write to log.
+            Write-CustomLog -Message ('Successfully instantiate ICertAdmin2 interface') -Level Verbose;
+        }
+        # Something went wrong.
+        catch
+        {
+            # Throw exception.
+            throw ('Failed to instantiate ICertAdmin2 interface. {0}' -f $_.Exception.Message);
+        }
+
+        # Foreach certificate to remove.
+        foreach ($certificate in $certificatesToRemove)
+        {
+            # Try to remove the certificate.
+            try
             {
-                # Get revoked certificates.
-                $result = Remove-CACertificateRevoked;
+                # Write to log.
+                Write-CustomLog -Message ('Trying to remove certificate/request with id {0}' -f $certificate.RequestID) -Level Verbose;
+
+                # Remove the certificate from the database.
+                $null = $caAdmin.DeleteRow($caConfigString, 0, 0, 0, $certificate.RequestID);
+
+                # Write to log.
+                Write-CustomLog -Message ('Successfully removed certificate/request') -Level Verbose;
+
+                # Add to result.
+                $null = $result.Add($certificate);
             }
-            # If state is expired.
-            elseif ($State -eq 'Expired')
+            # Something went wrong.
+            catch
             {
-                # Get expired certificates.
-                $result = Remove-CACertificateExpired;
-            }
-            # If state is denied.
-            elseif ($State -eq 'Denied')
-            {
-                # Get denied requests.
-                $result = Remove-CACertificateRequestDenied;
-            }
-            # If state is failed.
-            elseif ($State -eq 'Failed')
-            {
-                # Get failed requests.
-                $result = Remove-CACertificateRequestFailed;
-            }
-            # Else use default.
-            else
-            {
-                # Get certificates.
-                $result += [PSCustomObject]@{
-                    Revoked = Remove-CACertificateRevoked;
-                    Expired = Remove-CACertificateExpired;
-                    Denied  = Remove-CACertificateRequestDenied;
-                    Failed  = Remove-CACertificateRequestFailed;
-                };
+                # Throw exception.
+                throw ('Failed to remove certificate/request with id {0}. {1}' -f $certificate.RequestID, $_.Exception.Message);
             }
         }
     }
