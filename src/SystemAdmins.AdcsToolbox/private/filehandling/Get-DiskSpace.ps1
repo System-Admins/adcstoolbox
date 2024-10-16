@@ -31,7 +31,7 @@ function Get-DiskSpace
         foreach ($disk in $disks)
         {
             # Construct disk space object.
-            $result.Add(
+            $null = $result.Add(
                 [PSCustomObject]@{
                     DriveLetter    = $disk.DeviceID;
                     VolumeName     = $disk.VolumeName;
