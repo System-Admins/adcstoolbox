@@ -88,6 +88,9 @@ function Invoke-CADatabaseMaintenance
             # Stop the service.
             Stop-CAService;
 
+            # Wait until the service is stopped.
+            $serviceState = Wait-CAService -State Stopped;
+
             # Temporary extend the CRL.
             Set-CACrlConfig `
                 -OverlapUnits 0 `
@@ -100,10 +103,14 @@ function Invoke-CADatabaseMaintenance
             Start-CAService;
 
             # Wait until the service is running.
-            Wait-CAService -State Running;
+            $serviceState = Wait-CAService -State Running;
 
-            # Publish the CRL.
-            $null = Publish-CACrl;
+            # If the service is running.
+            if ($true -eq $serviceState)
+            {
+                # Publish the CRL.
+                $null = Publish-CACrl;
+            }
         }
 
         # Splatting for Remove-CACertificate.
@@ -127,6 +134,9 @@ function Invoke-CADatabaseMaintenance
         # Stop the service.
         Stop-CAService;
 
+        # Wait until the service is stopped.
+        $serviceState = Wait-CAService -State Stopped;
+
         # Defrag the database.
         Invoke-CADatabaseDefragmentation;
 
@@ -145,10 +155,14 @@ function Invoke-CADatabaseMaintenance
             Start-CAService;
 
             # Wait until the service is running.
-            Wait-CAService -State Running;
+            $serviceState = Wait-CAService -State Running;
 
-            # Publish the CRL.
-            $null = Publish-CACrl;
+            # If the service is running.
+            if ($true -eq $serviceState)
+            {
+                # Publish the CRL.
+                $null = Publish-CACrl;
+            }
         }
     }
     END
