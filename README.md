@@ -15,6 +15,7 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
   - [Get-CADatabasePath](#Get-CADatabasePath)
   - [Get-CADatabaseSize](#Get-CADatabaseSize)
   - [Get-CAService](#Get-CAService)
+  - [Invoke-CADatabaseDefragmentation](#Invoke-CADatabaseDefragmentation)
   - [Invoke-CADatabaseMaintenance](#Invoke-CADatabaseMaintenance)
   - [Publish-CACrl](#Publish-CACrl)
   - [Remove-CACertificate](#Remove-CACertificate)
@@ -248,6 +249,33 @@ Get-CADatabaseSize
 ### Output
 
 PSCustomObject
+
+
+
+
+### Invoke-CADatabaseDefragmentation
+
+#### Synopsis
+
+Defragment the Active Directory Certificate Services database. The CertSvc service must be stopped ([Stop-CAService](#Stop-CAService)), prior running this cmdlet.
+
+#### Parameter(s)
+
+| Type | Parameter | Description | Optional | Accepted Values |
+| ---- | --------- | ----------- | -------- | --------------- |
+|      |           |             |          |                 |
+
+#### Example(s)
+
+Get database path.
+
+```powershell
+Invoke-CADatabaseDefragmentation
+```
+
+### Output
+
+Void
 
 
 
