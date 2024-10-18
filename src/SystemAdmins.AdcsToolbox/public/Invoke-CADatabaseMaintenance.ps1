@@ -42,7 +42,7 @@ function Invoke-CADatabaseMaintenance
         if ($true -eq $Confirm)
         {
             # Get user input.
-            $userInput = Get-UserInput -Question 'Do you want to continue with expired/revoked certificate removal, AD CS service restart, temporary extend CRL? (Answer: Yes or No)' -Options 'Yes', 'No';
+            $userInput = Get-UserInput -Question 'Do you want to continue with expired/revoked certificate removal, AD CS service restart, temporary extend CRL? (Answer: "Yes" or "No")' -Options 'Yes', 'No';
 
             # If the user input is not 'Yes'.
             if ($userInput -ne 'Yes')
@@ -119,7 +119,7 @@ function Invoke-CADatabaseMaintenance
         };
 
         # If date is set.
-        if ($true -eq $PSBoundParameters.ContainsKey('Date'))
+        if ($true -eq $PSBoundParameters.ContainsKey('CertificateRemovalDate'))
         {
             # Add to the splat.
             $removeCertificateSplat.Add('Date', $CertificateRemovalDate);
