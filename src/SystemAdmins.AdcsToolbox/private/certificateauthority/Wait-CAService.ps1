@@ -33,7 +33,7 @@ function Wait-CAService
         $tryCount = 0;
 
         # Boolean to check if the service is in the desired state.
-        [boo]$targetState = $false;
+        [bool]$targetState = $false;
     }
     PROCESS
     {
@@ -44,19 +44,28 @@ function Wait-CAService
             $tryCount++;
 
             # Write to log.
-            Write-CustomLog -Message ("Waiting for CertSvc status to be '{0}'. This is run number {1}" -f $State, $tryCount) -Level Verbose;
+            Write-CustomLog -Message ("Waiting for CertSvc status to be '{0}'. This is run number {1} out of {2}" -f $State, $tryCount, $WaitLimit) -Level Verbose;
 
             # Get the service status.
             $serviceStatus = Get-CAService;
 
             # Check if the service is in the desired state.
-            if ($serviceStatus.Status -eq $State)
+            if ($serviceStatus -eq $State)
             {
                 # Write to log.
-                Write-CustomLog -Message ("CertSvc status is now '{0}'" -f $serviceStatus.Status) -Level Verbose;
+                Write-CustomLog -Message ("CertSvc status is now '{0}'" -f $serviceStatus) -Level Verbose;
 
                 # Set the target state to true.
                 $targetState = $true;
+            }
+            # Else service is not in desired state.
+            else
+            {
+                # Wait for 5 seconds before checking again.
+                Start-Sleep -Seconds 5;
+
+                # Write to log.
+                Write-CustomLog -Message ("CertSvc status is not ready, status is '{0}'. Waiting 5 seconds before getting status again" -f $serviceStatus) -Level Verbose;
             }
 
             # If the try counter is greater than the wait limit, exit the loop.
@@ -68,9 +77,6 @@ function Wait-CAService
                 # Exit the loop.
                 break;
             }
-
-            # Wait for 5 seconds before checking again.
-            Start-Sleep -Seconds 5;
         }
     }
     END
