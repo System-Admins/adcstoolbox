@@ -42,7 +42,7 @@ function Invoke-CADatabaseMaintenance
         if ($true -eq $Confirm)
         {
             # Get user input.
-            $userInput = Get-UserInput -Question 'Do you want to continue with expired/revoked certificate removal, AD CS service restart, temporary extend CRL? (Answer: Yes or No)' -Options 'Yes', 'No';
+            $userInput = Get-UserInput -Question 'Do you want to continue with expired/revoked certificate removal, AD CS service restart, temporary extend CRL? (Answer: "Yes" or "No")' -Options 'Yes', 'No';
 
             # If the user input is not 'Yes'.
             if ($userInput -ne 'Yes')
@@ -88,6 +88,9 @@ function Invoke-CADatabaseMaintenance
             # Stop the service.
             Stop-CAService;
 
+            # Wait until the service is stopped.
+            $serviceState = Wait-CAService -State Stopped;
+
             # Temporary extend the CRL.
             Set-CACrlConfig `
                 -OverlapUnits 0 `
@@ -99,11 +102,15 @@ function Invoke-CADatabaseMaintenance
             # Start the service.
             Start-CAService;
 
-            # Wait a few seconds.
-            Start-Sleep -Seconds 5;
+            # Wait until the service is running.
+            $serviceState = Wait-CAService -State Running;
 
-            # Publish the CRL.
-            $null = Publish-CACrl;
+            # If the service is running.
+            if ($true -eq $serviceState)
+            {
+                # Publish the CRL.
+                $null = Publish-CACrl;
+            }
         }
 
         # Splatting for Remove-CACertificate.
@@ -112,7 +119,7 @@ function Invoke-CADatabaseMaintenance
         };
 
         # If date is set.
-        if ($true -eq $PSBoundParameters.ContainsKey('Date'))
+        if ($true -eq $PSBoundParameters.ContainsKey('CertificateRemovalDate'))
         {
             # Add to the splat.
             $removeCertificateSplat.Add('Date', $CertificateRemovalDate);
@@ -126,6 +133,9 @@ function Invoke-CADatabaseMaintenance
 
         # Stop the service.
         Stop-CAService;
+
+        # Wait until the service is stopped.
+        $serviceState = Wait-CAService -State Stopped;
 
         # Defrag the database.
         Invoke-CADatabaseDefragmentation;
@@ -144,11 +154,15 @@ function Invoke-CADatabaseMaintenance
             # Start the service.
             Start-CAService;
 
-            # Wait a few seconds.
-            Start-Sleep -Seconds 5;
+            # Wait until the service is running.
+            $serviceState = Wait-CAService -State Running;
 
-            # Publish the CRL.
-            $null = Publish-CACrl;
+            # If the service is running.
+            if ($true -eq $serviceState)
+            {
+                # Publish the CRL.
+                $null = Publish-CACrl;
+            }
         }
     }
     END
