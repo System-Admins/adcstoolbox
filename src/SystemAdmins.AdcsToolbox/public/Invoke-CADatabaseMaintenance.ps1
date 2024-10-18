@@ -99,8 +99,8 @@ function Invoke-CADatabaseMaintenance
             # Start the service.
             Start-CAService;
 
-            # Wait a few seconds.
-            Start-Sleep -Seconds 5;
+            # Wait until the service is running.
+            Wait-CAService -State Running;
 
             # Publish the CRL.
             $null = Publish-CACrl;
@@ -144,8 +144,8 @@ function Invoke-CADatabaseMaintenance
             # Start the service.
             Start-CAService;
 
-            # Wait a few seconds.
-            Start-Sleep -Seconds 5;
+            # Wait until the service is running.
+            Wait-CAService -State Running;
 
             # Publish the CRL.
             $null = Publish-CACrl;

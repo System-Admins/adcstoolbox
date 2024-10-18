@@ -33,7 +33,7 @@
         "eventId": 5,
         "entryType": "Information",
         "logName": "Application",
-        "message": "Successfully made a backup of the database including the private key"
+        "message": "Successfully made a backup of the AD CS database including the private key"
     },
     {
         "eventId": 6,

@@ -98,7 +98,7 @@ function Backup-CADatabase
         if ($true -eq $PrivateKey)
         {
             # Write to event log.
-            Write-CustomEventLog -EventId 11;
+            Write-CustomEventLog -EventId 12;
 
             # Try to backup the private key.
             try
@@ -135,7 +135,7 @@ function Backup-CADatabase
         else
         {
             # Write to event log.
-            Write-CustomEventLog -EventId 12;
+            Write-CustomEventLog -EventId 11;
 
             # Try to backup the database.
             try
