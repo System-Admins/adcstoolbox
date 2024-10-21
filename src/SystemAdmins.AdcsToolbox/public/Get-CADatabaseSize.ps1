@@ -50,6 +50,12 @@ function Get-CADatabaseSize
             # Write to event log.
             Write-CustomEventLog -EventId 7 -AdditionalMessage ('Database size is {0} GB' -f $sizes.TotalGb);
         }
+        # Else under.
+        else
+        {
+            # Write to event log.
+            Write-CustomEventLog -EventId 13 -AdditionalMessage ('Database size is {0} GB' -f $sizes.TotalGb);
+        }
     }
     END
     {

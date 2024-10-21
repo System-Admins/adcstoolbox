@@ -19,9 +19,6 @@ function Get-CACrlConfig
         # Write to log.
         $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Getting CRL configuration from certificate authority';
 
-        # Get the registry path.
-        [pscustomobject]$registryPath = Get-CARegistryPath;
-
         # Object to return.
         [pscustomobject]$configuration = [pscustomobject]@{
             PeriodUnits            = $null;
@@ -41,31 +38,31 @@ function Get-CACrlConfig
     PROCESS
     {
         # Get period units.
-        $configuration.PeriodUnits = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLPeriodUnits');
+        $configuration.PeriodUnits = Get-CAConfigEntry -Entry 'CRLPeriodUnits';
 
         # Get period.
-        $configuration.Period = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLPeriod');
+        $configuration.Period = Get-CAConfigEntry -Entry 'CRLPeriod';
 
         # Get delta period units.
-        $configuration.DeltaPeriodUnits = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriodUnits');
+        $configuration.DeltaPeriodUnits = Get-CAConfigEntry -Entry 'CRLDeltaPeriodUnits';
 
         # Get delta period.
-        $configuration.DeltaPeriod = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriod');
+        $configuration.DeltaPeriod = Get-CAConfigEntry -Entry 'CRLDeltaPeriod';
 
         # Get overlap period units.
-        $configuration.OverlapUnits = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapUnits');
+        $configuration.OverlapUnits = Get-CAConfigEntry -Entry 'CRLOverlapUnits';
 
         # Get overlap period.
-        $configuration.OverlapPeriod = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapPeriod');
+        $configuration.OverlapPeriod = Get-CAConfigEntry -Entry 'CRLOverlapPeriod';
 
         # Get delta overlap period units.
-        $configuration.DeltaOverlapUnits = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapUnits');
+        $configuration.DeltaOverlapUnits = Get-CAConfigEntry -Entry 'CRLDeltaOverlapUnits';
 
         # Get delta overlap period.
-        $configuration.DeltaOverlapPeriod = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapPeriod');
+        $configuration.DeltaOverlapPeriod = Get-CAConfigEntry -Entry 'CRLDeltaOverlapPeriod';
 
         # Get delta next publish.
-        $deltaNextPublish = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaNextPublish');
+        $deltaNextPublish = Get-CAConfigEntry -Entry 'CRLDeltaNextPublish';
 
         # If the delta next publish is not null.
         if ($null -ne $deltaNextPublish)
@@ -78,7 +75,7 @@ function Get-CACrlConfig
         }
 
         # Get next publish.
-        $nextPublish = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLNextPublish');
+        $nextPublish = Get-CAConfigEntry -Entry 'CRLNextPublish';
 
         # If the next publish is not null.
         if ($null -ne $nextPublish)
@@ -91,7 +88,7 @@ function Get-CACrlConfig
         }
 
         # Get publication URLs.
-        $publicationURLs = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLPublicationURLs');
+        $publicationURLs = Get-CAConfigEntry -Entry 'CRLPublicationURLs';
 
         # If the publication URLs is not null.
         if ($null -ne $publicationURLs)
@@ -109,7 +106,7 @@ function Get-CACrlConfig
         }
 
         # Get if revocation check is enabled.
-        $revocationCheckEnabled = (Get-ItemPropertyValue -Path $registryPath.ActiveConfiguration -Name 'CRLFlags');
+        $revocationCheckEnabled = Get-CAConfigEntry -Entry 'CRLFlags';
 
         # If the revocation check is enabled.
         if ($revocationCheckEnabled -eq 2)
@@ -120,6 +117,7 @@ function Get-CACrlConfig
         # Else set to false.
         else
         {
+            # Set to false.
             $configuration.RevocationCheckEnabled = $false;
         }
     }

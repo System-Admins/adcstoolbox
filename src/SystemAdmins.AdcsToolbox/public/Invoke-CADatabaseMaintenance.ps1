@@ -66,31 +66,25 @@ function Invoke-CADatabaseMaintenance
         # Backup the database.
         $null = Backup-CADatabase -Path ('{0}\Database' -f $BackupFolderPath) -PrivateKey;
 
+        # Get current CRL configuraiton.
+        $originalCrlConfig = Get-CACrlConfig;
+
+        # If the CRL config file path dont exist.
+        if (-not (Test-Path -Path $originalCrlConfigFilePath -PathType Leaf))
+        {
+            # Write to log.
+            Write-CustomLog -Message ('Original (backup) CRL configuration file does not exist. Creating file at path {0}' -f $originalCrlConfigFilePath) -Level Verbose;
+
+            # Save the original CRL configuration to a file.
+            $null = $originalCrlConfig | Export-Clixml -Path $originalCrlConfigFilePath -Force;
+        }
+
         # Get the AD CS service status.
         $serviceStatus = Get-CAService;
 
         # If the service is running.
         if ($serviceStatus -eq 'Running')
         {
-            # Get current CRL configuraiton.
-            $originalCrlConfig = Get-CACrlConfig;
-
-            # If the CRL config file path dont exist.
-            if (-not (Test-Path -Path $originalCrlConfigFilePath -PathType Leaf))
-            {
-                # Write to log.
-                Write-CustomLog -Message ('Original (backup) CRL configuration file does not exist. Creating file at path {0}' -f $originalCrlConfigFilePath) -Level Verbose;
-
-                # Save the original CRL configuration to a file.
-                $null = $originalCrlConfig | Export-Clixml -Path $originalCrlConfigFilePath -Force;
-            }
-
-            # Stop the service.
-            Stop-CAService;
-
-            # Wait until the service is stopped.
-            $serviceState = Wait-CAService -State Stopped;
-
             # Temporary extend the CRL.
             Set-CACrlConfig `
                 -OverlapUnits 0 `
@@ -99,18 +93,8 @@ function Invoke-CADatabaseMaintenance
                 -DeltaOverlapUnits 0 `
                 -DeltaPeriodUnits 0;
 
-            # Start the service.
-            Start-CAService;
-
-            # Wait until the service is running.
-            $serviceState = Wait-CAService -State Running;
-
-            # If the service is running.
-            if ($true -eq $serviceState)
-            {
-                # Publish the CRL.
-                $null = Publish-CACrl;
-            }
+            # Publish the CRL.
+            $null = Publish-CACrl;
         }
 
         # Splatting for Remove-CACertificate.
@@ -132,21 +116,13 @@ function Invoke-CADatabaseMaintenance
         $null = Remove-CACertificate -State Revoked @removeCertificateSplat;
 
         # Stop the service.
-        Stop-CAService;
+        $null = Stop-CAService;
 
         # Wait until the service is stopped.
-        $serviceState = Wait-CAService -State Stopped;
+        $null = Wait-CAService -State Stopped;
 
         # Defrag the database.
-        Invoke-CADatabaseDefragmentation;
-
-        # Restore original CRL configuration.
-        Set-CACrlConfig `
-            -OverlapUnits $originalCrlConfig.OverlapUnits `
-            -Period $originalCrlConfig.Period `
-            -PeriodUnits $originalCrlConfig.PeriodUnits `
-            -DeltaOverlapUnits $originalCrlConfig.DeltaOverlapUnits `
-            -DeltaPeriodUnits $originalCrlConfig.DeltaOverlapUnits;
+        $null = Invoke-CADatabaseDefragmentation;
 
         # If the service was running.
         if ($serviceStatus -eq 'Running')
@@ -155,14 +131,18 @@ function Invoke-CADatabaseMaintenance
             Start-CAService;
 
             # Wait until the service is running.
-            $serviceState = Wait-CAService -State Running;
+            $null = Wait-CAService -State Running;
 
-            # If the service is running.
-            if ($true -eq $serviceState)
-            {
-                # Publish the CRL.
-                $null = Publish-CACrl;
-            }
+            # Restore original CRL configuration.
+            Set-CACrlConfig `
+                -OverlapUnits $originalCrlConfig.OverlapUnits `
+                -Period $originalCrlConfig.Period `
+                -PeriodUnits $originalCrlConfig.PeriodUnits `
+                -DeltaOverlapUnits $originalCrlConfig.DeltaOverlapUnits `
+                -DeltaPeriodUnits $originalCrlConfig.DeltaPeriodUnits;
+
+            # Publish the CRL.
+            $null = Publish-CACrl;
         }
     }
     END
