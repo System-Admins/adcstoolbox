@@ -97,12 +97,6 @@ function Invoke-CADatabaseMaintenance
                 -DeltaOverlapUnits 0 `
                 -DeltaPeriodUnits 0;
 
-            # Restart the service.
-            $null = Stop-CAService;
-            $null = Wait-CAService -State Stopped;
-            $null = Start-CAService;
-            $null = Wait-CAService -State Running;
-
             # Publish the CRL.
             $null = Publish-CACrl;
         }
@@ -150,12 +144,6 @@ function Invoke-CADatabaseMaintenance
                 -PeriodUnits $originalCrlConfig.PeriodUnits `
                 -DeltaOverlapUnits $originalCrlConfig.DeltaOverlapUnits `
                 -DeltaPeriodUnits $originalCrlConfig.DeltaPeriodUnits;
-
-            # Restart the service.
-            $null = Stop-CAService;
-            $null = Wait-CAService -State Stopped;
-            $null = Start-CAService;
-            $null = Wait-CAService -State Running;
 
             # Publish the CRL.
             $null = Publish-CACrl;
