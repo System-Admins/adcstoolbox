@@ -28,6 +28,10 @@ function Invoke-CADatabaseMaintenance
         [ValidateNotNullOrEmpty()]
         [string]$BackupFolderPath = $script:ModuleBackupFolder,
 
+        # Include private key in the backup.
+        [Parameter(Mandatory = $false)]
+        [bool]$PrivateKey = $true,
+
         # Confirm the action.
         [Parameter(Mandatory = $false)]
         [switch]$Confirm = $true
@@ -63,8 +67,8 @@ function Invoke-CADatabaseMaintenance
     }
     PROCESS
     {
-        # Backup the database.
-        $null = Backup-CADatabase -Path ('{0}\Database' -f $BackupFolderPath) -PrivateKey;
+        # Backup the database (with private key if applicable).
+        $null = Backup-CADatabase -Path ('{0}\Database' -f $BackupFolderPath) -PrivateKey:$PrivateKey;
 
         # Get current CRL configuraiton.
         $originalCrlConfig = Get-CACrlConfig;
@@ -92,6 +96,12 @@ function Invoke-CADatabaseMaintenance
                 -Period Weeks `
                 -DeltaOverlapUnits 0 `
                 -DeltaPeriodUnits 0;
+
+            # Restart the service.
+            $null = Stop-CAService;
+            $null = Wait-CAService -State Stopped;
+            $null = Start-CAService;
+            $null = Wait-CAService -State Running;
 
             # Publish the CRL.
             $null = Publish-CACrl;
@@ -140,6 +150,12 @@ function Invoke-CADatabaseMaintenance
                 -PeriodUnits $originalCrlConfig.PeriodUnits `
                 -DeltaOverlapUnits $originalCrlConfig.DeltaOverlapUnits `
                 -DeltaPeriodUnits $originalCrlConfig.DeltaPeriodUnits;
+
+            # Restart the service.
+            $null = Stop-CAService;
+            $null = Wait-CAService -State Stopped;
+            $null = Start-CAService;
+            $null = Wait-CAService -State Running;
 
             # Publish the CRL.
             $null = Publish-CACrl;

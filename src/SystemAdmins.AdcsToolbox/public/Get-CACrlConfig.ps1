@@ -120,6 +120,9 @@ function Get-CACrlConfig
             # Set to false.
             $configuration.RevocationCheckEnabled = $false;
         }
+
+        # Write to event log.
+        Write-CustomEventLog -EventId 64 -AdditionalMessage (Out-String -InputObject $configuration);
     }
     END
     {

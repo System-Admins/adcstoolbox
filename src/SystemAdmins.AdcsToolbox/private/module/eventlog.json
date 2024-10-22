@@ -138,6 +138,12 @@
         "message": "AD CS revocation configuration failed to publish"
     },
     {
+        "eventId": 64,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The current CRL configuration."
+    },
+    {
         "eventId": 91,
         "entryType": "Information",
         "logName": "Application",
