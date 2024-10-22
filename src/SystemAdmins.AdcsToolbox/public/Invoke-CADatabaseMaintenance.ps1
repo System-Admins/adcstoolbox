@@ -96,6 +96,9 @@ function Invoke-CADatabaseMaintenance
                 -Period Weeks `
                 -DeltaOverlapUnits 0 `
                 -DeltaPeriodUnits 0;
+
+            # Publish the CRL.
+            $null = Publish-CACrl;
         }
 
         # Splatting for Remove-CACertificate.
@@ -141,6 +144,9 @@ function Invoke-CADatabaseMaintenance
                 -PeriodUnits $originalCrlConfig.PeriodUnits `
                 -DeltaOverlapUnits $originalCrlConfig.DeltaOverlapUnits `
                 -DeltaPeriodUnits $originalCrlConfig.DeltaPeriodUnits;
+
+            # Publish the CRL.
+            $null = Publish-CACrl;
         }
     }
     END
