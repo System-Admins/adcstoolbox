@@ -56,7 +56,7 @@ function Publish-CACrl
             Write-CustomLog -Message 'Trying to publish CRL' -Level Verbose;
 
             # Publish the CRL.
-            $null = $caAdmin.PublishCRL($caConfigString, [datetime]::Now, 3);
+            $null = $caAdmin.PublishCRL($caConfigString, 0);
 
             # Write to log.
             Write-CustomLog -Message 'Successfully published the CRL' -Level Verbose;

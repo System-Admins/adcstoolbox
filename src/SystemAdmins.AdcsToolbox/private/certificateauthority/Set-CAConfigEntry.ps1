@@ -20,7 +20,7 @@ function Set-CAConfigEntry
         # Entry value.
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]$EntryValue
+        $EntryValue
     )
 
     BEGIN
