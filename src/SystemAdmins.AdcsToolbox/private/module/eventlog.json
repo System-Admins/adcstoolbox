@@ -78,6 +78,12 @@
         "message": "Starting a backup of the AD CS database with private key"
     },
     {
+        "eventId": 13,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The database size is under 25 GB"
+    },
+    {
         "eventId": 31,
         "entryType": "Error",
         "logName": "Application",
@@ -130,6 +136,12 @@
         "entryType": "Error",
         "logName": "Application",
         "message": "AD CS revocation configuration failed to publish"
+    },
+    {
+        "eventId": 64,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "The current CRL configuration."
     },
     {
         "eventId": 91,

@@ -79,9 +79,6 @@ function Set-CACrlConfig
     {
         # Write to log.
         $customProgress = Write-CustomProgress -Activity $MyInvocation.MyCommand.Name -CurrentOperation 'Setting CRL configuration on certificate authority';
-
-        # Get the registry path.
-        [pscustomobject]$registryPath = Get-CARegistryPath;
     }
     PROCESS
     {
@@ -92,7 +89,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL period units to "{0}"' -f $PeriodUnits) -Level Verbose;
 
             # Set period units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriodUnits' -Value $PeriodUnits -Force;
+            Set-CAConfigEntry -Entry 'CRLPeriodUnits' -EntryValue $PeriodUnits;
         }
 
         # Set period.
@@ -102,7 +99,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL period to "{0}"' -f $Period) -Level Verbose;
 
             # Set period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLPeriod' -Value $Period -Force;
+            Set-CAConfigEntry -Entry 'CRLPeriod' -EntryValue $Period;
         }
 
         # Set delta period units.
@@ -112,7 +109,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta period units to "{0}"' -f $DeltaPeriodUnits) -Level Verbose;
 
             # Set delta period units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriodUnits' -Value $DeltaPeriodUnits -Force;
+            Set-CAConfigEntry -Entry 'CRLDeltaPeriodUnits' -EntryValue $DeltaPeriodUnits;
         }
 
         # Set delta period.
@@ -122,7 +119,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta period to "{0}"' -f $DeltaPeriod) -Level Verbose;
 
             # Set delta period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaPeriod' -Value $DeltaPeriod -Force;
+            Set-CAConfigEntry -Entry 'CRLDeltaPeriod' -EntryValue $DeltaPeriod;
         }
 
         # Set overlap units.
@@ -132,7 +129,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL overlap units to "{0}"' -f $OverlapUnits) -Level Verbose;
 
             # Set overlap units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapUnits' -Value $OverlapUnits -Force;
+            Set-CAConfigEntry -Entry 'CRLOverlapUnits' -EntryValue $OverlapUnits;
         }
 
         # Set overlap period.
@@ -142,7 +139,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL overlap period to "{0}"' -f $OverlapPeriod) -Level Verbose;
 
             # Set overlap period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLOverlapPeriod' -Value $OverlapPeriod -Force;
+            Set-CAConfigEntry -Entry 'CRLOverlapPeriod' -EntryValue $OverlapPeriod;
         }
 
         # Set delta overlap units.
@@ -152,7 +149,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta overlap units to "{0}"' -f $DeltaOverlapUnits) -Level Verbose;
 
             # Set delta overlap units.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapUnits' -Value $DeltaOverlapUnits -Force;
+            Set-CAConfigEntry -Entry 'CRLDeltaOverlapUnits' -EntryValue $DeltaOverlapUnits;
         }
 
         # Set delta overlap period.
@@ -162,7 +159,7 @@ function Set-CACrlConfig
             Write-CustomLog -Message ('Setting CRL delta overlap period to "{0}"' -f $DeltaOverlapPeriod) -Level Verbose;
 
             # Set delta overlap period.
-            Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLDeltaOverlapPeriod' -Value $DeltaOverlapPeriod -Force;
+            Set-CAConfigEntry -Entry 'CRLDeltaOverlapPeriod' -EntryValue $DeltaOverlapPeriod;
         }
 
         # Set revocation check.
@@ -174,8 +171,8 @@ function Set-CACrlConfig
                 # Write to log.
                 Write-CustomLog -Message 'Enabling CRL revocation check' -Level Verbose;
 
-                # Set revocation check.
-                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 2 -Force;
+                # Enable revocation check.
+                Set-CAConfigEntry -Entry 'CRLFlags' -EntryValue 2;
             }
             # If the revocation check should b disabled.
             else
@@ -183,8 +180,8 @@ function Set-CACrlConfig
                 # Write to log.
                 Write-CustomLog -Message 'Disabling CRL revocation check' -Level Verbose;
 
-                # Set revocation check.
-                Set-ItemProperty -Path $registryPath.ActiveConfiguration -Name 'CRLRevocationCheckEnabled' -Value 10 -Force;
+                # Disable revocation check.
+                Set-CAConfigEntry -Entry 'CRLFlags' -EntryValue 10;
             }
         }
 

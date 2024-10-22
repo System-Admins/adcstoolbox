@@ -28,11 +28,26 @@ function Import-ModuleEventLogFile
         if (-not (Test-Path -Path $Path))
         {
             # Throw error.
-            throw ("The Event Log config file '{0}' dont exist, aborting" -f $Path);
+            throw ("The event log config file '{0}' dont exist, aborting" -f $Path);
         }
 
-        # Import JSON file.
-        $eventLogTable = Get-Content -Path $Path | ConvertFrom-Json;
+        # Try to import JSON file.
+        try
+        {
+            # Write to log.
+            Write-CustomLog -Message ("Importing the event log JSON file '{0}'" -f $Path) -Level Verbose;
+
+            # Import JSON file.
+            $eventLogTable = Get-Content -Path $Path -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop;
+
+            # Write to log.
+            Write-CustomLog -Message ("The event log JSON file '{0}' was imported successfully" -f $Path) -Level Verbose;
+        }
+        catch
+        {
+            # Throw error.
+            throw ("Something went wrong while importing the event log JSON file '{0}', the execption is:`r`n" -f $Path, $_);
+        }
     }
     END
     {
