@@ -9,6 +9,7 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
 - [Usage](#usage)
 - [Cmdlets](#cmdlets)
   - [Backup-CA](#Backup-CA)
+  - Export-CACertificate
   - [Get-CACertificate](#Get-CACertificate)
   - [Get-CACommonName](#Get-CACommonName)
   - [Get-CACrlConfig](#Get-CACrlConfig)
@@ -95,10 +96,6 @@ Backup certificate authority with or without the private key.
 | String | Path       | Backup folder path                | False    | C:\Path\To\My\Folder |
 | Switch | PrivateKey | Include private key in the backup | True     |                      |
 
-### Output
-
-Hashtable
-
 #### Example(s)
 
 Create a backup without a private key to the folder "C:\Backup".
@@ -112,6 +109,36 @@ Create a backup with the private key to the folder "C:\Backup".
 ```powershell
 Backup-CA -Path 'C:\Backup' -PrivateKey
 ```
+
+### Output
+
+Hashtable
+
+
+
+### Export-CACertificate
+
+#### Synopsis
+
+Export certificate authority certificate (public key).
+
+#### Parameter(s)
+
+| Type   | Parameter  | Description        | Optional | Accepted Values      |
+| ------ | ---------- | ------------------ | -------- | -------------------- |
+| String | FolderPath | Backup folder path | False    | C:\Path\To\My\Folder |
+
+#### Example(s)
+
+Export the CA certificate (public key) the folder "C:\Backup".
+
+```powershell
+Export-CACertificate -FolderPath 'C:\Backup'
+```
+
+### Output
+
+String
 
 
 

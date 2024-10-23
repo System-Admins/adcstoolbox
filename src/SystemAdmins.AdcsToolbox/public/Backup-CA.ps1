@@ -100,7 +100,7 @@ function Backup-CA
         };
 
         # If the password is set.
-        if ([string]::IsNullOrEmpty($Password))
+        if (-not [string]::IsNullOrEmpty($Password))
         {
             # Write to log.
             Write-CustomLog -Message 'Backup will be password protected' -Level Verbose;
@@ -120,6 +120,9 @@ function Backup-CA
     }
     PROCESS
     {
+        # Export CA certificate.
+        $null = Export-CACertificate -FolderPath $Path;
+
         # If private key backup is requested.
         if ($true -eq $PrivateKey)
         {
@@ -143,7 +146,7 @@ function Backup-CA
                 Write-CustomLog -Message ("Trying to backup the database with private key to the directory '{0}'" -f $Path) -Level Verbose;
 
                 # Backup the database.
-                Backup-CARoleService -Path $Path @backupSplat;
+                Backup-CARoleService @backupSplat;
 
                 # Write to log.
                 Write-CustomLog -Message ("Successfully made a backup of the database including the private key to the directory '{0}'" -f $Path) -Level Verbose;
@@ -180,7 +183,7 @@ function Backup-CA
                 Write-CustomLog -Message ("Trying to backup the database without the private key to the directory '{0}'" -f $Path) -Level Verbose;
 
                 # Backup the database.
-                Backup-CARoleService -Path $Path -DatabaseOnly @backupSplat;
+                Backup-CARoleService -DatabaseOnly @backupSplat;
 
                 # Write to log.
                 Write-CustomLog -Message ("Successfully made a backup of the database without the private key to the directory '{0}'" -f $Path) -Level Verbose;

@@ -25,7 +25,7 @@ function Test-EntrustSecurityWorldInstalled
     PROCESS
     {
         # If the software is installed.
-        if ($null -eq $env:NFAST_KMDATA)
+        if (-not [string]::IsNullOrEmpty($env:NFAST_KMDATA))
         {
             # Write to log.
             Write-CustomLog -Message 'Entrust Security World Software is installed' -Level Verbose;

@@ -75,7 +75,7 @@ function Invoke-CADatabaseMaintenance
         };
 
         # If the password is set.
-        if ([string]::IsNullOrEmpty($Password))
+        if (-not [string]::IsNullOrEmpty($Password))
         {
             # Convert the password to a secure string.
             $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force;
