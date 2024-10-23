@@ -9,7 +9,7 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
 - [Usage](#usage)
 - [Cmdlets](#cmdlets)
   - [Backup-CA](#Backup-CA)
-  - Export-CACertificate
+  - [Export-CACertificate](#Export-CACertificate)
   - [Get-CACertificate](#Get-CACertificate)
   - [Get-CACommonName](#Get-CACommonName)
   - [Get-CACrlConfig](#Get-CACrlConfig)
