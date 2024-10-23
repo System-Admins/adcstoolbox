@@ -32,6 +32,10 @@ function Invoke-CADatabaseMaintenance
         [Parameter(Mandatory = $false)]
         [bool]$PrivateKey = $true,
 
+        # Password for the backup.
+        [Parameter(Mandatory = $false)]
+        [string]$Password,
+
         # Confirm the action.
         [Parameter(Mandatory = $false)]
         [switch]$Confirm = $true
@@ -64,11 +68,26 @@ function Invoke-CADatabaseMaintenance
 
         # File path for original CRL configuration.
         $originalCrlConfigFilePath = ('{0}\crlconfig.xml' -f $BackupFolderPath);
+
+        # Splatting for the backup.
+        $backupSplat = @{
+            Path = ('{0}\Database' -f $BackupFolderPath);
+        };
+
+        # If the password is set.
+        if ([string]::IsNullOrEmpty($Password))
+        {
+            # Convert the password to a secure string.
+            $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force;
+
+            # Add password to the splat.
+            $null = $backupSplat.Add('Password', $securePassword);
+        }
     }
     PROCESS
     {
         # Backup the database (with private key if applicable).
-        $null = Backup-CADatabase -Path ('{0}\Database' -f $BackupFolderPath) -PrivateKey:$PrivateKey;
+        $null = Backup-CA @backupSplat -PrivateKey:$PrivateKey;
 
         # Get current CRL configuraiton.
         $originalCrlConfig = Get-CACrlConfig;

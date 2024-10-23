@@ -184,5 +184,17 @@
         "entryType": "Warning",
         "logName": "Application",
         "message": "The request was could not be removed"
+    },
+    {
+        "eventId": 151,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Entrust Security World Software is not installed"
+    },
+    {
+        "eventId": 152,
+        "entryType": "Information",
+        "logName": "Application",
+        "message": "Created a copy of the Entrust Security World files"
     }
 ]

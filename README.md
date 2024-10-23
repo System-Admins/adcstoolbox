@@ -8,7 +8,7 @@ PowerShell module "SystemAdmins.AdcsToolbox" for Active Directory Certificate Se
 - [Installation](#installation)
 - [Usage](#usage)
 - [Cmdlets](#cmdlets)
-  - [Backup-CADatabase](#Backup-CADatabase)
+  - [Backup-CA](#Backup-CA)
   - [Get-CACertificate](#Get-CACertificate)
   - [Get-CACommonName](#Get-CACommonName)
   - [Get-CACrlConfig](#Get-CACrlConfig)
@@ -82,7 +82,7 @@ Most AD CS servers don't have access to the internet, therefore it's required to
 
 ## Cmdlets
 
-### Backup-CADatabase
+### Backup-CA
 
 #### Synopsis
 
@@ -104,13 +104,13 @@ Hashtable
 Create a backup without a private key to the folder "C:\Backup".
 
 ```powershell
-Backup-CADatabase -Path 'C:\Backup'
+Backup-CA -Path 'C:\Backup'
 ```
 
 Create a backup with the private key to the folder "C:\Backup".
 
 ```powershell
-Backup-CADatabase -Path 'C:\Backup' -PrivateKey
+Backup-CA -Path 'C:\Backup' -PrivateKey
 ```
 
 
