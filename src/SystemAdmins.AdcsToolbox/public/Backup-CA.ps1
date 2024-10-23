@@ -1,4 +1,4 @@
-function Backup-CADatabase
+function Backup-CA
 {
     <#
     .SYNOPSIS
@@ -10,9 +10,9 @@ function Backup-CADatabase
     .PARAMETER PrivateKey
         Backup private key.
     .EXAMPLE
-        Backup-CADatabase -Path 'C:\Backup';
+        Backup-CA -Path 'C:\Backup';
     .EXAMPLE
-        Backup-CADatabase -Path 'C:\Backup' -PrivateKey;
+        Backup-CA -Path 'C:\Backup' -PrivateKey;
     #>
     [cmdletbinding()]
     [OutputType([pscustomobject])]
@@ -27,7 +27,11 @@ function Backup-CADatabase
 
         # Private key backup.
         [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
-        [switch]$PrivateKey
+        [switch]$PrivateKey,
+
+        # Password for the backup.
+        [Parameter(Mandatory = $false, ValueFromPipelineByPropertyName = $true)]
+        [string]$Password
     )
 
     BEGIN
@@ -64,8 +68,11 @@ function Backup-CADatabase
         }
 
         # If the path does not exist.
-        if (-not (Test-Path $Path))
+        if (-not (Test-Path -Path $Path))
         {
+            # Write to log.
+            Write-CustomLog -Message ("Creating backup folder '{0}'" -f $Path) -Level Verbose;
+
             # Create the path.
             $null = New-Item -Path $Path -ItemType 'Directory' -Force;
         }
@@ -86,6 +93,25 @@ function Backup-CADatabase
         # Get the common name of the certificate authority.
         $commonName = Get-CACommonName;
 
+        # Splatting for the backup.
+        $backupSplat = @{
+            Path        = $Path;
+            ErrorAction = 'Stop';
+        };
+
+        # If the password is set.
+        if (-not [string]::IsNullOrEmpty($Password))
+        {
+            # Write to log.
+            Write-CustomLog -Message 'Backup will be password protected' -Level Verbose;
+
+            # Convert the password to a secure string.
+            $securePassword = ConvertTo-SecureString -String $Password -AsPlainText -Force;
+
+            # Add password to the splat.
+            $null = $backupSplat.Add('Password', $securePassword);
+        }
+
         # Object to return.
         [pscustomobject]$result = [pscustomobject]@{
             DatabasePath   = ('{0}\DataBase' -f $Path);
@@ -94,11 +120,24 @@ function Backup-CADatabase
     }
     PROCESS
     {
+        # Export CA certificate.
+        $null = Export-CACertificate -FolderPath $Path;
+
         # If private key backup is requested.
         if ($true -eq $PrivateKey)
         {
             # Write to event log.
             Write-CustomEventLog -EventId 12;
+
+            # If Entrust Security World is installed.
+            if ($true -eq (Test-EntrustSecurityWorldInstalled))
+            {
+                # Backup Entrust Security World.
+                $entrustSecurityWorld = Backup-EntrustSecurityWorld -Path $Path;
+
+                # Add member to result.
+                $null = Add-Member -InputObject $result -MemberType NoteProperty -Name 'EntrustSecurityWorldPath' -Value $entrustSecurityWorld.BackupFolderPath -Force;
+            }
 
             # Try to backup the private key.
             try
@@ -107,7 +146,7 @@ function Backup-CADatabase
                 Write-CustomLog -Message ("Trying to backup the database with private key to the directory '{0}'" -f $Path) -Level Verbose;
 
                 # Backup the database.
-                Backup-CARoleService -Path $Path -KeepLog -Force -ErrorAction Stop;
+                Backup-CARoleService @backupSplat;
 
                 # Write to log.
                 Write-CustomLog -Message ("Successfully made a backup of the database including the private key to the directory '{0}'" -f $Path) -Level Verbose;
@@ -128,7 +167,7 @@ function Backup-CADatabase
                 Write-CustomEventLog -EventId 3;
 
                 # Backup without private key.
-                $null = Backup-CADatabase -Path $Path;
+                $null = Backup-CA -Path $Path;
             }
         }
         # Else backup without private key.
@@ -144,7 +183,7 @@ function Backup-CADatabase
                 Write-CustomLog -Message ("Trying to backup the database without the private key to the directory '{0}'" -f $Path) -Level Verbose;
 
                 # Backup the database.
-                Backup-CARoleService -Path $Path -DatabaseOnly -KeepLog -Force -ErrorAction Stop;
+                Backup-CARoleService -DatabaseOnly @backupSplat;
 
                 # Write to log.
                 Write-CustomLog -Message ("Successfully made a backup of the database without the private key to the directory '{0}'" -f $Path) -Level Verbose;
