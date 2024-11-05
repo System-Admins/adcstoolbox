@@ -76,6 +76,26 @@ function Backup-CA
             # Create the path.
             $null = New-Item -Path $Path -ItemType 'Directory' -Force;
         }
+        # Else the path exists.
+        else
+        {
+            # Write to log.
+            Write-CustomLog -Message ("Backup folder '{0}' already exists" -f $Path) -Level Verbose;
+
+            # If database backup folder already exist.
+            if (Test-Path -Path ('{0}\DataBase' -f $Path))
+            {
+                # Old database backup folder name.
+                $oldDatabaseBackupFolder = ('DataBase_{0}' -f (Get-Date -Format 'yyyyMMddHHmmss'));
+
+                # Write to log.
+                Write-CustomLog -Message ("Database backup folder '{0}\DataBase' already exists" -f $Path) -Level Verbose;
+                Write-CustomLog -Message ("Renaming database backup folder '{0}\{1}' already exists" -f $Path, $oldDatabaseBackupFolder) -Level Verbose;
+
+                # Rename the folder.
+                $null = Rename-Item -Path ('{0}\DataBase' -f $Path) -NewName $oldDatabaseBackupFolder -Force;
+            }
+        }
 
         # Get the CertSvc service status.
         $serviceStatus = Get-CAService;

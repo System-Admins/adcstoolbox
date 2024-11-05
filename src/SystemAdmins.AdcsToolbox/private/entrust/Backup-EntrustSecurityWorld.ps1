@@ -67,13 +67,13 @@ function Backup-EntrustSecurityWorld
             else
             {
                 # Write to log.
-                Write-CustomLog -Message ("Copying all files from '{0}' to '{1}'" -f $securityWorldDataFolderPath, $backupFolder) -Level Verbose;
+                Write-CustomLog -Message ("Copying all files from '{0}' to '{1}'" -f $securityWorldDataFolderPath, $backupFolderPath) -Level Verbose;
 
                 # Copy the files from the folder.
-                $null = Copy-Item -Path ($securityWorldDataFolderPath + '\*') -Destination $backupFolder -Recurse -Force;
+                $null = Copy-Item -Path ($securityWorldDataFolderPath + '\*') -Destination $backupFolderPath -Recurse -Force;
 
                 # Write to event log.
-                Write-CustomEventLog -EventId 152 -AdditionalMessage ('Backup folder is {0}' -f $backupFolder);
+                Write-CustomEventLog -EventId 152 -AdditionalMessage ('Backup folder is {0}' -f $backupFolderPath);
             }
         }
     }
